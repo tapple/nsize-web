@@ -27,8 +27,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'delivery.apps.DeliveryConfig',
     'django_extensions',
+    'sl_profile.apps.SLProfileConfig',
+    'delivery.apps.DeliveryConfig',
+    'body_detector.apps.BodyDetectorConfig',
+    'payroll.apps.PayrollConfig',
+    'nsweb.apps.NSWebConfig',
 ]
 
 MIDDLEWARE = [

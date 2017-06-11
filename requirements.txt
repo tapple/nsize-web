@@ -19,8 +19,10 @@ imagesize==0.7.1
 jedi==0.10.2
 Jinja2==2.9.6
 MarkupSafe==1.0
+olefile==0.44
 packaging==16.8
 paramiko==2.1.2
+Pillow==4.1.1
 prompt-toolkit==1.0.14
 ptpython==0.39
 pyasn1==0.2.3

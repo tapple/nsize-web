@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class SlprofileConfig(AppConfig):
-    name = 'slprofile'
+class SLProfileConfig(AppConfig):
+    name = 'sl_profile'

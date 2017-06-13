@@ -47,13 +47,17 @@ def find_marketplace_store(name):
 
 def marketplace_product_info(url):
     """
-    returns the (name, image url) of the marketplace product at url
+    returns the (name, image url, slurl) of the marketplace product at url
     """
     r = requests.get(url)
     soup = BeautifulSoup(r.text)
-    tag = soup.select_one('a#main-product-image img')
+    img_tag = soup.select_one('a#main-product-image img')
+    slurl_tag = soup.select_one('a.slurl')
+    slurl = ""
+    if (slurl_tag): slurl = slurl_tag.attrs['href']
     return (
-        tag.attrs['alt'],
-        tag.attrs['src'],
+        img_tag.attrs['alt'],
+        img_tag.attrs['src'],
+        slurl
     )
 

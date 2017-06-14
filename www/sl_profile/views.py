@@ -20,3 +20,19 @@ class AvatarInfo(APIView):
         names = utils.parse_fullname(info.fullName)
         return Response({**info._asdict(), **names._asdict()})
 
+class FindMarketplaceStore(APIView):
+    """
+    Search for the store for the given avatar name
+    """
+    def get(self, request, name, format=None):
+        stores = utils.find_marketplace_store(name)
+        return Response([store._asdict() for store in stores])
+
+class MarketplaceProductInfo(APIView):
+    """
+    Search for the store for the given avatar name
+    """
+    def get(self, request, url, format=None):
+        info = utils.marketplace_product_info(url)
+        return Response(info._asdict())
+

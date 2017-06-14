@@ -1,3 +1,4 @@
+from collections import namedtuple
 from urllib.parse import quote, quote_plus
 from uuid import UUID
 import re
@@ -15,7 +16,7 @@ def find_avatar_key(name):
     """
     url_re = re.compile(SL_WORLD_BASE_URL + '(.*)')
     r = requests.get('http://search.secondlife.com/client_search.php?q=' + quote(name))
-    soup = BeautifulSoup(r.text)
+    soup = BeautifulSoup(r.text, "html.parser")
     tags = soup('a', href=url_re)
     return [UUID(url_re.match(tag.attrs['href']).group(1)) for tag in tags]
 
@@ -24,9 +25,10 @@ def avatar_info(key):
     returns the (name, image url, description) of the given avatar key
     using the SL World API
     """
+    Info = namedtuple("Info", 'name img_url description')
     r = requests.get(SL_WORLD_BASE_URL + str(key))
-    soup = bs4.BeautifulSoup(r.text)
-    return (
+    soup = BeautifulSoup(r.text, "html.parser")
+    return Info(
         soup.find('title').string,
         soup.find('img', class_='parcelimg').attrs['src'],
         soup.find('meta', attrs={'name': 'description'}).attrs['content'],
@@ -38,24 +40,26 @@ def find_marketplace_store(name):
     possible results in the form of (store_url, store_name) tuples.
     Avatar username works well as name
     """
+    Store = namedtuple("Store", 'url name')
     base_url = 'https://marketplace.secondlife.com'
     search_path = '/stores/store_name_search?search%5Bkeywords%5D='
     r = requests.get(base_url + search_path + quote_plus(name))
-    soup = BeautifulSoup(r.text)
+    soup = BeautifulSoup(r.text, "html.parser")
     tags = soup('a', href=re.compile('/stores/\d+'))
-    return [(base_url + tag.attrs['href'], tag.string) for tag in tags]
+    return [Store(base_url + tag.attrs['href'], tag.string) for tag in tags]
 
 def marketplace_product_info(url):
     """
     returns the (name, image url, slurl) of the marketplace product at url
     """
+    Info = namedtuple("Info", 'name img_url slurl')
     r = requests.get(url)
-    soup = BeautifulSoup(r.text)
+    soup = BeautifulSoup(r.text, "html.parser")
     img_tag = soup.select_one('a#main-product-image img')
     slurl_tag = soup.select_one('a.slurl')
     slurl = ""
     if (slurl_tag): slurl = slurl_tag.attrs['href']
-    return (
+    return Info(
         img_tag.attrs['alt'],
         img_tag.attrs['src'],
         slurl

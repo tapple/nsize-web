@@ -25,7 +25,7 @@ def avatar_info(key):
     returns the (name, image url, description) of the given avatar key
     using the SL World API
     """
-    Info = namedtuple("Info", 'name img_url description')
+    Info = namedtuple("Info", 'fullName imgUrl description')
     r = requests.get(SL_WORLD_BASE_URL + str(key))
     soup = BeautifulSoup(r.text, "html.parser")
     return Info(
@@ -52,7 +52,7 @@ def marketplace_product_info(url):
     """
     returns the (name, image url, slurl) of the marketplace product at url
     """
-    Info = namedtuple("Info", 'name img_url slurl')
+    Info = namedtuple("Info", 'name imgUrl slurl')
     r = requests.get(url)
     soup = BeautifulSoup(r.text, "html.parser")
     img_tag = soup.select_one('a#main-product-image img')
@@ -64,4 +64,21 @@ def marketplace_product_info(url):
         img_tag.attrs['src'],
         slurl
     )
+
+def to_username(legacy_name):
+     return legacy_name.lower().replace(' ', '.')
+
+def parse_fullname(full_name):
+    ParsedName = namedtuple("ParsedName", 'userName displayName')
+    match = re.fullmatch(r'(.*) \((.*)\)', full_name)
+    if (match):
+        return ParsedName(match.group(2), match.group(1))
+    else:
+        return ParsedName(to_username(full_name), full_name)
+
+def to_fullname(user_name, display_name):
+    if (to_username(display_name) == user_name):
+        return display_name
+    else:
+        return "%s (%s)" % (display_name, user_name)
 

@@ -10,3 +10,13 @@ class FindAvatarKey(APIView):
     def get(self, request, name, format=None):
         keys = utils.find_avatar_key(name)
         return Response(keys)
+
+class AvatarInfo(APIView):
+    """
+    Return full name, user name, display name, image url, description of the given uuid
+    """
+    def get(self, request, uuid, format=None):
+        info = utils.avatar_info(uuid)
+        names = utils.parse_fullname(info.fullName)
+        return Response({**info._asdict(), **names._asdict()})
+

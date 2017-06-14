@@ -3,7 +3,7 @@ import unittest
 
 from django.test import TestCase
 
-from sl_profile import utils
+from . import utils
 
 class NetworkUtilsTestCase(unittest.TestCase):
     def test_find_avatar_key(self):

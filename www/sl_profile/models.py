@@ -8,9 +8,8 @@ class Grid(models.Model):
 
 class Resident(models.Model):
     key = models.UUIDField()
-    name = models.CharField(max_length=64, db_index=True)
+    user_name = models.CharField(max_length=64, db_index=True)
     grid = models.ForeignKey(Grid, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
-

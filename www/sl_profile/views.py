@@ -28,6 +28,14 @@ class FindMarketplaceStore(APIView):
         stores = utils.find_marketplace_store(name)
         return Response([store._asdict() for store in stores])
 
+class MarketplaceStoreInfo(APIView):
+    """
+    Search for the store for the given avatar name
+    """
+    def get(self, request, url, format=None):
+        store = utils.marketplace_store_info(url)
+        return Response(store._asdict())
+
 class MarketplaceProductInfo(APIView):
     """
     Search for the store for the given avatar name

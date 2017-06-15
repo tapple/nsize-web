@@ -22,6 +22,13 @@ class NetworkUtilsTestCase(unittest.TestCase):
         self.assertEqual(stores[0].url, 'https://marketplace.secondlife.com/stores/62403')
         self.assertEqual(stores[0].name, 'Tavatar')
 
+    def test_marketplace_store_info(self):
+        store = utils.marketplace_store_info('https://marketplace.secondlife.com/stores/185578/')
+        self.assertEqual(store.name, "MAMACITA & MADUSA"),
+        self.assertEqual(store.slurl, "http://maps.secondlife.com/secondlife/Coral%20Coast/217/176/3812"),
+        self.assertEqual(store.legacyName, "Y0URP0RN"),
+        self.assertEqual(store.website, "http://y0urp0rn.tumblr.com/"),
+
     def test_marketplace_product_info_1(self):
         info = utils.marketplace_product_info('https://marketplace.secondlife.com/p/FLG-No-Cabide-Ariana-Set-Top-Skirt-Shoes-HUDs-30-Models/11977233?ple=h')
         self.assertEqual(info.name, '::FLG No Cabide - Ariana Set -Top-Skirt-Shoes-HUDs 30 Models')

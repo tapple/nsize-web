@@ -2,3 +2,8 @@ __pycache__
 *.swp
 db.sqlite3
 settings_secret.py
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

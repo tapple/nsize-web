@@ -1,7 +1,33 @@
 __pycache__
 *.swp
+*.pyc
+
 db.sqlite3
-settings_secret.py
+*.db
+*~
+
+html/
+htmlcov/
+coverage/
+.coverage
+.tox
+build/
+dist/
+*.egg-info/
+MANIFEST
+
+bin/
+include/
+lib/
+local/
+
+*.log
+pip-log.txt
+
+.DS_Store
+
+env
+site
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

@@ -1,0 +1,17 @@
+# dependencies that are only related to deving on your local machine
+-r test.txt
+
+# Debugging
+django-extensions==1.7.9
+ptpython==0.39
+httpie==0.9.9
+
+# Docs
+Sphinx==1.6.2
+
+# Command Utils
+Fabric==1.13.2
+pycrypto==2.6.1
+
+# Deployment
+awsebcli==3.10.2

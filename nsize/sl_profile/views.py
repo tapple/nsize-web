@@ -18,7 +18,10 @@ class AvatarInfo(APIView):
     def get(self, request, uuid, format=None):
         info = utils.avatar_info(uuid)
         names = utils.parse_fullname(info.fullName)
-        return Response({**info._asdict(), **names._asdict()})
+        #return Response({**info._asdict(), **names._asdict()}) # Only in Python 3.5+
+        response = info._asdict()
+        response.update(names._asdict())
+        return Response(response)
 
 class FindMarketplaceStore(APIView):
     """

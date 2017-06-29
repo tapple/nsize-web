@@ -25,6 +25,7 @@ class Common(Configuration):
 
         # Your apps
         'sl_profile.apps.SLProfileConfig',
+        'sl_cap_gateway.apps.SLCapGatewayConfig',
         'delivery.apps.DeliveryConfig',
         'body_detector.apps.BodyDetectorConfig',
         'payroll.apps.PayrollConfig',

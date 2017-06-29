@@ -1,19 +1,23 @@
+from rest_framework import serializers
 
-"""
-class ExtraInventoryItem(models.Model):
-    key = models.UUIDField()
-    name = models.CharField(max_length=64)
-    type = models.PositiveSmallIntegerField()
-    creator_key = models.UUIDField()
-    base_perms = models.IntegerField()
-    owner_perms = models.IntegerField()
-    next_owner_perms = models.IntegerField()
-    group_perms = models.IntegerField()
-    everyone_perms = models.IntegerField()
+class AttachmentSerializer(serializers.Serializer):
+    pass
+
+class InventorySerializer(serializers.Serializer):
+    key = serializers.UUIDField()
+    name = serializers.CharField(max_length=64)
+    type = serializers.PositiveSmallIntegerField()
+    creator_key = serializers.UUIDField()
+    base_perms = serializers.IntegerField()
+    owner_perms = serializers.IntegerField()
+    next_owner_perms = serializers.IntegerField()
+    group_perms = serializers.IntegerField()
+    everyone_perms = serializers.IntegerField()
 
     def __str__(self):
         return self.name
 
+"""
 class DeliveryRequest(models.Model):
     session_id = models.UUIDField()
     owner_id = models.UUIDField()

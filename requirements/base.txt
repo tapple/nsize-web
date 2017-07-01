@@ -22,7 +22,7 @@ whitenoise==3.3.0
 # Media files
 boto==2.47.0
 django_unique_upload==0.2.1
-Pillow==4.1.1
+Pillow==4.2.0
 
 # Image manipulation
 #django-versatileimagefield==1.7.0

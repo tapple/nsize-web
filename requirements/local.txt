@@ -7,7 +7,7 @@ ptpython==0.39
 httpie==0.9.9
 
 # Docs
-Sphinx==1.6.2
+Sphinx==1.6.3
 
 # Command Utils
 Fabric==1.13.2

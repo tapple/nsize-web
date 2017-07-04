@@ -199,6 +199,60 @@ class Common(Configuration):
     }
     """
 
+    # Logging
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'django.server': {
+                '()': 'django.utils.log.ServerFormatter',
+                'format': '[%(server_time)s] %(message)s',
+            },
+            'verbose': {
+                'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+            },
+            'simple': {
+                'format': '%(levelname)s %(message)s'
+            },
+        },
+        'filters': {
+            'require_debug_false': {
+                '()': 'django.utils.log.RequireDebugFalse',
+            },
+            'require_debug_true': {
+                '()': 'django.utils.log.RequireDebugTrue',
+            },
+        },
+        'handlers': {
+            'django.server': {
+                'level': 'INFO',
+                'class': 'logging.StreamHandler',
+                'formatter': 'django.server',
+            },
+            'console': {
+                'level': 'INFO',
+                'filters': ['require_debug_true'],
+                'class': 'logging.StreamHandler',
+                'formatter': 'verbose'
+            },
+            'mail_admins': {
+                'level': 'ERROR',
+                'filters': ['require_debug_false'],
+                'class': 'django.utils.log.AdminEmailHandler'
+            }
+        },
+        'loggers': {
+            'django.server': {
+                'handlers': ['django.server'],
+                'level': 'INFO',
+                'propagate': False,
+            },
+        },
+        'root': {
+            'handlers': ['console'],
+        },
+    }
+    #
     # Custom user app
 #    AUTH_USER_MODEL = 'users.User'
 

@@ -1,6 +1,7 @@
 import os
 from .common import Common
 from configurations import values
+import fakeredis
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -37,10 +38,20 @@ class Local(Common):
     VERSATILEIMAGEFIELD_SETTINGS = Common.VERSATILEIMAGEFIELD_SETTINGS
     VERSATILEIMAGEFIELD_SETTINGS['create_images_on_demand'] = True
 
+    CACHES = {
+	"default": {
+	    "BACKEND": "django_redis.cache.RedisCache",
+            'LOCATION': os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
+	    "OPTIONS": {
+		"REDIS_CLIENT_CLASS": "fakeredis.FakeStrictRedis",
+	    }
+	}
+    }
+
     # Django RQ local settings
     RQ_QUEUES = {
         'default': {
-            'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379'),
+            'URL': os.getenv('REDIS_URL', 'redis://localhost:6379'),
             'DB': 0,
             'DEFAULT_TIMEOUT': 500,
         },

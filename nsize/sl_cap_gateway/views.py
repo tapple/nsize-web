@@ -6,14 +6,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from djproxy.views import HttpProxy
-import redis
+from django_redis import get_redis_connection
 
-r = redis.Redis()
+redis = get_redis_connection("default")
 REDIS_PREFIX = 'lsl_gateway/cap/'
 
 def longest_path_match(path):
     for i in range(len(path)-1, -1, -1):
-        if (r.exists(REDIS_PREFIX + path[:i])):
+        if (redis.exists(REDIS_PREFIX + path[:i])):
             return path[:i], path[i:]
     return (None, None)
 
@@ -33,7 +33,7 @@ class RegisterView(APIView):
     """
     def post(self, request, format=None):
         #import pdb; pdb.set_trace()
-        r.sadd(REDIS_PREFIX + request.data['path'], request.data['url'])
+        redis.sadd(REDIS_PREFIX + request.data['path'], request.data['url'])
         return Response(request.data)
 
 class ProxyView(HttpProxy):
@@ -51,10 +51,10 @@ class ProxyView(HttpProxy):
         if not self.registered_path:
             if settings.DEBUG:
                 raise KeyError('No caps found for path "{}". Registered paths:\n{}'
-                        .format(path, r.keys(REDIS_PREFIX + "*")))
+                        .format(path, redis.keys(REDIS_PREFIX + "*")))
             else:
                 raise KeyError('No caps registered')
-        self.registered_url = r.srandmember(REDIS_PREFIX + self.registered_path).decode()
+        self.registered_url = redis.srandmember(REDIS_PREFIX + self.registered_path).decode()
         url = self.registered_url + proxy_path
         print('"{}" + "{}"'.format(self.registered_url, proxy_path))
         return url
@@ -72,7 +72,7 @@ class ProxyView(HttpProxy):
                 if (self.is_healthy(response)):
                     return response
                 else:
-                    r.srem(REDIS_PREFIX + self.registered_path, self.registered_url)
+                    redis.srem(REDIS_PREFIX + self.registered_path, self.registered_url)
         except KeyError as err:
             return HttpResponse(
                 status=status.HTTP_503_SERVICE_UNAVAILABLE,

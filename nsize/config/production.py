@@ -1,7 +1,9 @@
 import os
 from configurations import values
-from boto.s3.connection import OrdinaryCallingFormat
+#from boto.s3.connection import OrdinaryCallingFormat
+import django_redis
 from .common import Common
+
 
 try:
     # Python 2.x
@@ -55,7 +57,7 @@ class Production(Common):
     AWS_AUTO_CREATE_BUCKET = True
     AWS_QUERYSTRING_AUTH = False
     MEDIA_URL = 'https://s3.amazonaws.com/{}/'.format(AWS_STORAGE_BUCKET_NAME)
-    AWS_S3_CALLING_FORMAT = OrdinaryCallingFormat()
+    #AWS_S3_CALLING_FORMAT = OrdinaryCallingFormat()
 
     # https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching#cache-control
     # Response can be cached by browser and any intermediary caches (i.e. it is "public") for up to 1 day
@@ -68,28 +70,25 @@ class Production(Common):
     STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
     # Caching
-    redis_url = urlparse.urlparse(os.environ.get('REDISTOGO_URL', 'redis://localhost:6379'))
     CACHES = {
-        'default': {
-            'BACKEND': 'redis_cache.RedisCache',
-            'LOCATION': '{}:{}'.format(redis_url.hostname, redis_url.port),
-            'OPTIONS': {
-                'DB': 0,
-                'PASSWORD': redis_url.password,
-                'PARSER_CLASS': 'redis.connection.HiredisParser',
+	"default": {
+	    "BACKEND": "django_redis.cache.RedisCache",
+            'LOCATION': os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
+	    "OPTIONS": {
+		"CLIENT_CLASS": "django_redis.client.DefaultClient",
                 'CONNECTION_POOL_CLASS': 'redis.BlockingConnectionPool',
                 'CONNECTION_POOL_CLASS_KWARGS': {
                     'max_connections': 50,
                     'timeout': 20,
                 }
-            }
-        }
+	    }
+	}
     }
 
     # Django RQ production settings
     RQ_QUEUES = {
         'default': {
-            'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379'),
+            'URL': os.getenv('REDIS_URL', 'redis://localhost:6379'),
             'DB': 0,
             'DEFAULT_TIMEOUT': 500,
         },

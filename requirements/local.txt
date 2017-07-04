@@ -7,11 +7,11 @@ ptpython==0.39
 httpie==0.9.9
 
 # Docs
-Sphinx==1.6.3
+#Sphinx==1.6.3
 
 # Command Utils
-Fabric==1.13.2
-pycrypto==2.6.1
+#Fabric==1.13.2
+#pycrypto==2.6.1
 
 # Deployment
 awsebcli==3.10.3

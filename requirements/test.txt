@@ -16,3 +16,4 @@ coverage==4.4.1
 
 # Style Enforcement
 flake8==3.3.0
+fakeredis==0.8.2

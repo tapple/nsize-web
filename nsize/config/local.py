@@ -1,7 +1,11 @@
 import os
 from .common import Common
 from configurations import values
-import fakeredis
+
+try:
+    import fakeredis
+except ImportError:
+    pass
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

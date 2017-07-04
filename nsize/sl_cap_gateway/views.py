@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.http import HttpResponse
 
@@ -8,6 +10,7 @@ from rest_framework.response import Response
 from djproxy.views import HttpProxy
 from django_redis import get_redis_connection
 
+logger = logging.getLogger(__name__)
 redis = get_redis_connection("default")
 REDIS_PREFIX = 'lsl_gateway/cap/'
 
@@ -33,6 +36,7 @@ class RegisterView(APIView):
     """
     def post(self, request, format=None):
         #import pdb; pdb.set_trace()
+        logger.info("Registering cap server: %s", request.data)
         redis.sadd(REDIS_PREFIX + request.data['path'], request.data['url'])
         return Response(request.data)
 
@@ -56,7 +60,7 @@ class ProxyView(HttpProxy):
                 raise KeyError('No caps registered')
         self.registered_url = redis.srandmember(REDIS_PREFIX + self.registered_path).decode()
         url = self.registered_url + proxy_path
-        print('"{}" + "{}"'.format(self.registered_url, proxy_path))
+        logger.info('Proxying request: "%s" -> "%s"', path, url)
         return url
 
     def is_healthy(self, response):
@@ -72,8 +76,11 @@ class ProxyView(HttpProxy):
                 if (self.is_healthy(response)):
                     return response
                 else:
+                    logger.info('Cap server has disappeared: "%s" -> "%s"',
+                            self.registered_path, self.registered_url)
                     redis.srem(REDIS_PREFIX + self.registered_path, self.registered_url)
         except KeyError as err:
+            raise log.error('No caps found for path "%s"', self.kwargs['path'])
             return HttpResponse(
                 status=status.HTTP_503_SERVICE_UNAVAILABLE,
                 content=err.args[0])

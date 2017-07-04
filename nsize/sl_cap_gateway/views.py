@@ -1,8 +1,11 @@
 from django.conf import settings
-from django.http import Http404
-from django.views import View
+from django.http import HttpResponse
+
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
+from djproxy.views import HttpProxy
 import redis
 
 r = redis.Redis()
@@ -33,19 +36,45 @@ class RegisterView(APIView):
         r.sadd(REDIS_PREFIX + request.data['path'], request.data['url'])
         return Response(request.data)
 
-class ProxyView(View):
+class ProxyView(HttpProxy):
     """
     register backend
     """
-    def get(self, request, path, format=None):
+
+    base_url = 'ignored'
+
+    @property
+    def proxy_url(self):
         #import pdb; pdb.set_trace()
-        base_path, proxy_path = longest_path_match(path)
-        if not base_path:
+        path = self.kwargs['path']
+        self.registered_path, proxy_path = longest_path_match(path)
+        if not self.registered_path:
             if settings.DEBUG:
-                raise Http404('No caps found for path "{}". Registered paths:\n{}'
+                raise KeyError('No caps found for path "{}". Registered paths:\n{}'
                         .format(path, r.keys(REDIS_PREFIX + "*")))
             else:
-                raise Http404("Not found")
-        base_url = r.srandmember(REDIS_PREFIX + base_path).decode()
-        url = base_url + proxy_path
-        return Response(url)
+                raise KeyError('No caps registered')
+        self.registered_url = r.srandmember(REDIS_PREFIX + self.registered_path).decode()
+        url = self.registered_url + proxy_path
+        print('"{}" + "{}"'.format(self.registered_url, proxy_path))
+        return url
+
+    def is_healthy(self, response):
+        if (response.status_code != status.HTTP_404_NOT_FOUND): return True
+        if (not response.content.startswith(b"cap not found: ")): return True
+        return False
+
+    def proxy(self):
+        try:
+            while True:
+                response = super().proxy()
+                #import pdb; pdb.set_trace()
+                if (self.is_healthy(response)):
+                    return response
+                else:
+                    r.srem(REDIS_PREFIX + self.registered_path, self.registered_url)
+        except KeyError as err:
+            return HttpResponse(
+                status=status.HTTP_503_SERVICE_UNAVAILABLE,
+                content=err.args[0])
+

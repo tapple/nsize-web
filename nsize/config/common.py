@@ -250,6 +250,7 @@ class Common(Configuration):
         },
         'root': {
             'handlers': ['console'],
+            'level': 'INFO',
         },
     }
     #

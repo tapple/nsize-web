@@ -127,6 +127,7 @@ class Common(Configuration):
         },
     ]
 
+    """
     # Logging
     LOGGING = {
         'version': 1,
@@ -196,6 +197,7 @@ class Common(Configuration):
 #            }
         }
     }
+    """
 
     # Custom user app
 #    AUTH_USER_MODEL = 'users.User'

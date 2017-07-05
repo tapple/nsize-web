@@ -60,7 +60,7 @@ class ProxyView(HttpProxy):
                 raise KeyError('No caps registered')
         self.registered_url = redis.srandmember(REDIS_PREFIX + self.registered_path).decode()
         url = self.registered_url + proxy_path
-        logger.info('Proxying request: "%s" -> "%s"', path, url)
+        logger.debug('Proxying request: "%s" -> "%s"', path, url)
         return url
 
     def is_healthy(self, response):
@@ -80,7 +80,7 @@ class ProxyView(HttpProxy):
                             self.registered_path, self.registered_url)
                     redis.srem(REDIS_PREFIX + self.registered_path, self.registered_url)
         except KeyError as err:
-            raise log.error('No caps found for path "%s"', self.kwargs['path'])
+            logger.error('No caps found for path "%s"', self.kwargs['path'])
             return HttpResponse(
                 status=status.HTTP_503_SERVICE_UNAVAILABLE,
                 content=err.args[0])

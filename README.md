@@ -9,6 +9,7 @@ SECURITY TODO:
 TESTING TODO:
 - make migrations for sl_profile so it's unit tests can be run via manage.py
 - write unit tests for sl_cap_gateway
+- make some unit tests for the lsl services, using their api
 
 INFRA TODO:
 - Maybe make a db backend for sl_cap_gateway so I don't have to pay for a redis instance I'm not using

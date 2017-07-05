@@ -3,6 +3,8 @@ from urllib.parse import unquote
 
 from django.conf import settings
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 from rest_framework import status
 from rest_framework.views import APIView
@@ -41,6 +43,8 @@ class RegisterView(APIView):
         redis.sadd(REDIS_PREFIX + unquote(request.data['path']), request.data['url'])
         return Response(request.data)
 
+
+@method_decorator(csrf_exempt, name='dispatch')
 class ProxyView(HttpProxy):
     """
     register backend

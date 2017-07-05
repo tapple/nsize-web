@@ -1,4 +1,5 @@
 import logging
+from urllib.parse import unquote
 
 from django.conf import settings
 from django.http import HttpResponse
@@ -37,7 +38,7 @@ class RegisterView(APIView):
     def post(self, request, format=None):
         #import pdb; pdb.set_trace()
         logger.info("Registering cap server: %s", request.data)
-        redis.sadd(REDIS_PREFIX + request.data['path'], request.data['url'])
+        redis.sadd(REDIS_PREFIX + unquote(request.data['path']), request.data['url'])
         return Response(request.data)
 
 class ProxyView(HttpProxy):
@@ -51,7 +52,7 @@ class ProxyView(HttpProxy):
     def proxy_url(self):
         #import pdb; pdb.set_trace()
         path = self.kwargs['path']
-        self.registered_path, proxy_path = longest_path_match(path)
+        self.registered_path, proxy_path = longest_path_match(unquote(path))
         if not self.registered_path:
             if settings.DEBUG:
                 raise KeyError('No caps found for path "{}". Registered paths:\n{}'

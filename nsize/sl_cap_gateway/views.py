@@ -16,7 +16,7 @@ redis = get_redis_connection("default")
 REDIS_PREFIX = 'lsl_gateway/cap/'
 
 def longest_path_match(path):
-    for i in range(len(path)-1, -1, -1):
+    for i in range(len(path), -1, -1):
         if (redis.exists(REDIS_PREFIX + path[:i])):
             return path[:i], path[i:]
     return (None, None)

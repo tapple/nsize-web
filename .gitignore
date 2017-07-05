@@ -33,3 +33,6 @@ site
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+#collectstatic
+staticfiles/

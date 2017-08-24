@@ -8,6 +8,7 @@ class Grid(models.Model):
 
 class Resident(models.Model):
     key = models.UUIDField()
+    # normalized: all lowercase, space replaced with .
     user_name = models.CharField(max_length=64, db_index=True)
     grid = models.ForeignKey(Grid, on_delete=models.CASCADE)
 

@@ -89,6 +89,15 @@ class BodyPartProfile(LocalOrRemoteImage, BodyPart):
         related_name='price_of',
     )
 
+"""
+People who want to be notified when new garments are made for a body part
+"""
+class BodyPartInterest(models.Model):
+    body_part = models.ForeignKey(BodyPart, on_delete=models.CASCADE)
+    resident = models.ForeignKey(Resident, on_delete=models.CASCADE)
+    vote = models.BooleanField(default=False)
+    watch = models.BooleanField(default=False)
+
 class GarmentCompatibility(models.Model):
     body_part = models.ForeignKey(BodyPartProfile, on_delete=models.CASCADE)
     garment = models.ForeignKey(GarmentProfile, on_delete=models.CASCADE)
@@ -109,11 +118,4 @@ class GarmentProfile(LocalOrRemoteImage, Garment):
     )
 
 
-
-"""
-People who want to be notified when new garments are made for a body part
-"""
-class BodyPartSubscriptions(models.Model):
-    body_part = models.ForeignKey(BodyPart, on_delete=models.CASCADE)
-    resident = models.ForeignKey(Resident, on_delete=models.CASCADE)
 

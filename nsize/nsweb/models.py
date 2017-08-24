@@ -1,7 +1,7 @@
 from django.db import models
 
 from sl_profile.models import Resident
-from delivery.models import BodyPart
+from delivery.models import BodyPart, Garment
 
 class CrowdSourcedField(models.Model):
     pass # no columns except primary key
@@ -62,12 +62,12 @@ class ResidentProfile(LocalOrRemoteImage, Resident):
     )
     store_slurl = models.OneToOneField(
         CrowdSourcedField, 
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
         related_name='store_slurl_of',
     )
     marketplace_store_url = models.OneToOneField(
         CrowdSourcedField, 
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
         related_name='marketplace_store_url_of',
     )
 
@@ -75,17 +75,17 @@ class BodyPartProfile(LocalOrRemoteImage, BodyPart):
     creator = models.ForeignKey(ResidentProfile, on_delete=models.CASCADE)
     slurl = models.OneToOneField(
         CrowdSourcedField, 
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
         related_name='slurl_of',
     )
     marketplace_url = models.OneToOneField(
         CrowdSourcedField, 
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
         related_name='marketplace_url_of',
     )
     price = models.OneToOneField(
         CrowdSourcedField, 
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
         related_name='price_of',
     )
 
@@ -100,10 +100,10 @@ class BodyPartInterest(models.Model):
 
 class GarmentCompatibility(models.Model):
     body_part = models.ForeignKey(BodyPartProfile, on_delete=models.CASCADE)
-    garment = models.ForeignKey(GarmentProfile, on_delete=models.CASCADE)
+    garment = models.ForeignKey('GarmentProfile', on_delete=models.CASCADE)
     compatible = models.OneToOneField(
         CrowdSourcedField, 
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
         related_name='compatibility_of',
     )
 
@@ -113,9 +113,7 @@ class GarmentProfile(LocalOrRemoteImage, Garment):
     compatabilities = models.ManyToManyField(
         BodyPartProfile, 
         through=GarmentCompatibility,
-        on_delete=models.CASCADE
         related_name='compatibilities',
     )
-
 
 

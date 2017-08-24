@@ -8,7 +8,7 @@ class GarmentDistribution(models.Model):
     collaborator = models.ForeignKey(Resident, on_delete=models.CASCADE)
     percentage = models.PositiveSmallIntegerField()
 
-class Transaction(model.Model):
+class Transaction(models.Model):
     """
     A transaction, downloaded from the SL Transaction History
     https://accounts.secondlife.com/transaction_history/
@@ -175,7 +175,7 @@ class MonthLedger(models.Model):
     last_month_shortfall = models.IntegerField()
     next_month_net_budget = models.IntegerField()
     next_month_gross_budget = models.IntegerField()
-    days_in_next_month = models.SmallPositiveIntegerField()
+    days_in_next_month = models.PositiveSmallIntegerField()
     next_month_daily_budget = models.IntegerField()
     
     # Sales

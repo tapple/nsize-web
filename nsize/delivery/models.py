@@ -31,7 +31,9 @@ class Garment(models.Model):
         related_name='mod_garments',
         related_query_name='mod_garment',
     )
-    modified = models.DateTimeField(auto_now=True)
+
+    date_added = models.DateField(auto_now_add=True)
+    date_removed = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return self.type_name

@@ -96,9 +96,20 @@ class OutfitProfile(Outfit):
     price = models.PositiveIntegerField(default=0)
 
 class UnpackEvent(models.Model):
-    outfit = models.ForeignKey(Outfit, on_delete=models.CASCADE)
-    creator = models.ForeignKey(Resident, on_delete=models.CASCADE)
-    owner = models.ForeignKey(Resident, on_delete=models.CASCADE)
+    outfit = models.ForeignKey(
+        Outfit, 
+        on_delete=models.CASCADE,
+    )
+    creator = models.ForeignKey(
+        Resident, 
+        on_delete=models.CASCADE,
+        related_name='creator_of_unpack',
+    )
+    owner = models.ForeignKey(
+        Resident, 
+        on_delete=models.CASCADE,
+        related_name='owner_of_unpack',
+    )
     prim_name = models.CharField(max_length=64)
     slurl = models.URLField(max_length=200)
     time = models.DateTimeField(auto_now_add=True)

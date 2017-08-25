@@ -70,28 +70,17 @@ class Production(Common):
     STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
     # Caching
-    CACHES = {
-	"default": {
-	    "BACKEND": "django_redis.cache.RedisCache",
-            'LOCATION': os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
-	    "OPTIONS": {
-		"CLIENT_CLASS": "django_redis.client.DefaultClient",
-                'CONNECTION_POOL_CLASS': 'redis.BlockingConnectionPool',
-                'CONNECTION_POOL_CLASS_KWARGS': {
-                    'max_connections': 50,
-                    'timeout': 20,
-                }
-	    }
-	}
-    }
+    CACHES = values.CacheURLValue('redis://localhost:6379/0')
 
     # Django RQ production settings
+    """
     RQ_QUEUES = {
         'default': {
-            'URL': os.getenv('REDIS_URL', 'redis://localhost:6379'),
+            'URL': os.getenv('CACHE_URL', 'redis://localhost:6379'),
             'DB': 0,
             'DEFAULT_TIMEOUT': 500,
         },
     }
+    """
 
     Common.VERSATILEIMAGEFIELD_SETTINGS['create_images_on_demand'] = False

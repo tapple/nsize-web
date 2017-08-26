@@ -1,5 +1,5 @@
 # Django
-Django==1.11.3
+Django==1.11.4
 
 # Environmental var configuration
 django-configurations==2.0
@@ -14,7 +14,7 @@ django-redis==4.8.0
 django-model-utils==3.0.0
 
 # Rest apis
-djangorestframework==3.6.3
+djangorestframework==3.6.4
 #Markdown==2.6.8
 #django-filter==1.0.4
 
@@ -24,7 +24,7 @@ whitenoise==3.3.0
 # Media files
 #boto==2.47.0
 #django_unique_upload==0.2.1
-Pillow==4.2.0
+Pillow==4.2.1
 
 # Image manipulation
 #django-versatileimagefield==1.7.0
@@ -37,7 +37,7 @@ pytz==2017.2
 
 # Parsing Secondlife api's
 backoff==1.4.3
-requests==2.18.1
+requests==2.18.4
 beautifulsoup4==4.6.0
 lxml==3.8.0
 djproxy==2.3.4

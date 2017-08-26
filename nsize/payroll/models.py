@@ -1,6 +1,6 @@
 from django.db import models
 
-from sl_profile.models import Resident
+from sl_profile.models import Grid,Resident
 from delivery.models import Garment
 
 class GarmentDistribution(models.Model):
@@ -71,7 +71,14 @@ class Transaction(models.Model):
     )
     category = models.CharField(max_length=5, choices=CATEGORY_CHOICES)
 
+    grid = models.ForeignKey(Grid, on_delete=models.CASCADE)
     fiscal_day = models.DateField()
+
+    class Meta:
+        db_table = 'payroll_transaction_log'
+        indexes = [
+            models.Index(fields=['grid', 'fiscal_day', 'resident']),
+        ]
 
 class Outfit(models.Model):
     """
@@ -113,9 +120,17 @@ class UnpackEvent(models.Model):
     prim_name = models.CharField(max_length=64)
     slurl = models.URLField(max_length=200)
     time = models.DateTimeField(auto_now_add=True)
+    grid = models.ForeignKey(Grid, on_delete=models.CASCADE)
+    fiscal_day = models.DateField()
+    class Meta:
+        db_table = 'payroll_unpack_log'
+        indexes = [
+            models.Index(fields=['grid', 'fiscal_day', 'creator']),
+        ]
 
 class DayLedger(models.Model):
-    fiscal_day = models.DateField(primary_key=True)
+    grid = models.ForeignKey(Grid, on_delete=models.CASCADE)
+    fiscal_day = models.DateField()
 
     # Sales
     sale_count = models.PositiveIntegerField()
@@ -141,6 +156,9 @@ class DayLedger(models.Model):
     sales_to_date = models.PositiveIntegerField()
     creator_dividend_to_date = models.PositiveIntegerField()
 
+    class Meta:
+        unique_together = (("grid", "fiscal_day"),)
+
 class MyDayLedger(DayLedger):
     """ Computed statistics for the logged in user """
 
@@ -163,6 +181,10 @@ class MyDayLedger(DayLedger):
         managed = False
 
 class MonthLedger(models.Model):
+    grid = models.ForeignKey(Grid, on_delete=models.CASCADE)
+    first_day = models.DateField()
+    last_day = models.DateField()
+
     # Income
     rent_income = models.PositiveIntegerField()
     stipend_income = models.PositiveIntegerField()
@@ -202,6 +224,9 @@ class MonthLedger(models.Model):
     # Dividends
     total_dividend = models.IntegerField()
     dividend_per_garment = models.PositiveIntegerField()
+
+    class Meta:
+        unique_together = (("grid", "first_day"),)
 
 class MyMonthLedger(MonthLedger):
     """ Computed statistics for the logged in user """

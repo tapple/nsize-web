@@ -10,6 +10,11 @@ class BodyPartMatcher(models.Model):
     attach_point_min = models.PositiveSmallIntegerField(default=0)
     attach_point_max = models.PositiveSmallIntegerField(default=100)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['creator_key']),
+        ]
+
 """
 Everything a person is wearing at the time of the request.
 Currently not persisted

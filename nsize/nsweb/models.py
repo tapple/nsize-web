@@ -3,42 +3,29 @@ from django.db import models
 from sl_profile.models import Resident
 from delivery.models import BodyPart, Garment
 
-class CrowdSourcedField(models.Model):
-    pass # no columns except primary key
-
 """ by default, has no value. Can be used for voting """
 class CrowdSourcedFieldVersion(models.Model):
-    field = models.ForeignKey(CrowdSourcedField, on_delete=models.CASCADE)
+    field_id = models.PositiveIntegerField()
+    version = models.PositiveIntegerField(default=0)
     votes = models.PositiveIntegerField(default=0)
     editor_key = models.UUIDField()
     editor_ip = models.GenericIPAddressField()
     edited = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        abstract = True
+        unique_together = (("field_id", "version"),)
+        indexes = [
+            models.Index(fields=['field_id', 'version']),
+        ]
+
 class CrowdSourcedCharFieldVersion(CrowdSourcedFieldVersion):
-    version = models.OneToOneField(
-        CrowdSourcedFieldVersion, 
-        parent_link=True,
-        on_delete=models.CASCADE,
-        related_name='char_value',
-    )
     value = models.CharField(max_length=200, blank=True)
 
 class CrowdSourcedPositiveIntegerFieldVersion(CrowdSourcedFieldVersion):
-    version = models.OneToOneField(
-        CrowdSourcedFieldVersion, 
-        parent_link=True,
-        on_delete=models.CASCADE,
-        related_name='int_value',
-    )
     value = models.PositiveIntegerField(default=0)
 
 class CrowdSourcedBooleanFieldVersion(CrowdSourcedFieldVersion):
-    version = models.OneToOneField(
-        CrowdSourcedFieldVersion, 
-        parent_link=True,
-        on_delete=models.CASCADE,
-        related_name='bool_value',
-    )
     value = models.BooleanField()
 
 class LocalOrRemoteImage(models.Model):
@@ -56,17 +43,17 @@ class LocalOrRemoteImage(models.Model):
 class ResidentProfile(LocalOrRemoteImage, Resident):
     display_name = models.CharField(max_length=64)
     store_name = models.OneToOneField(
-        CrowdSourcedField, 
+        CrowdSourcedCharFieldVersion, 
         on_delete=models.CASCADE,
         related_name='store_name_of',
     )
     store_slurl = models.OneToOneField(
-        CrowdSourcedField, 
+        CrowdSourcedCharFieldVersion, 
         on_delete=models.CASCADE,
         related_name='store_slurl_of',
     )
     marketplace_store_url = models.OneToOneField(
-        CrowdSourcedField, 
+        CrowdSourcedCharFieldVersion, 
         on_delete=models.CASCADE,
         related_name='marketplace_store_url_of',
     )
@@ -74,17 +61,17 @@ class ResidentProfile(LocalOrRemoteImage, Resident):
 class BodyPartProfile(LocalOrRemoteImage, BodyPart):
     creator = models.ForeignKey(ResidentProfile, on_delete=models.CASCADE)
     slurl = models.OneToOneField(
-        CrowdSourcedField, 
+        CrowdSourcedCharFieldVersion, 
         on_delete=models.CASCADE,
         related_name='slurl_of',
     )
     marketplace_url = models.OneToOneField(
-        CrowdSourcedField, 
+        CrowdSourcedCharFieldVersion, 
         on_delete=models.CASCADE,
         related_name='marketplace_url_of',
     )
     price = models.OneToOneField(
-        CrowdSourcedField, 
+        CrowdSourcedPositiveIntegerFieldVersion, 
         on_delete=models.CASCADE,
         related_name='price_of',
     )
@@ -102,7 +89,7 @@ class GarmentCompatibility(models.Model):
     body_part = models.ForeignKey(BodyPartProfile, on_delete=models.CASCADE)
     garment = models.ForeignKey('GarmentProfile', on_delete=models.CASCADE)
     compatible = models.OneToOneField(
-        CrowdSourcedField, 
+        CrowdSourcedBooleanFieldVersion, 
         on_delete=models.CASCADE,
         related_name='compatibility_of',
     )

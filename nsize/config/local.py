@@ -16,6 +16,8 @@ class Local(Common):
     for config in Common.TEMPLATES:
         config['OPTIONS']['debug'] = DEBUG
 
+    ALLOWED_HOSTS = ["*"]
+
     # Testing
     INSTALLED_APPS = Common.INSTALLED_APPS
     INSTALLED_APPS += (

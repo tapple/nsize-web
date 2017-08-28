@@ -28,6 +28,7 @@ pip-log.txt
 
 env
 site
+.idea
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

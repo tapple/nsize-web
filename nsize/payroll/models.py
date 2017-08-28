@@ -1,12 +1,14 @@
 from django.db import models
 
-from sl_profile.models import Grid,Resident
-from delivery.models import Garment
+from sl_profile.models import Grid, Resident
+from delivery.models import Garment, BodyPart
+
 
 class GarmentDistribution(models.Model):
     garment = models.ForeignKey(Garment, on_delete=models.CASCADE)
     collaborator = models.ForeignKey(Resident, on_delete=models.CASCADE)
     percentage = models.PositiveSmallIntegerField()
+
 
 class Transaction(models.Model):
     """
@@ -80,53 +82,6 @@ class Transaction(models.Model):
             models.Index(fields=['grid', 'fiscal_day', 'resident']),
         ]
 
-class Outfit(models.Model):
-    """
-    Every outfit that a texture artist makes. Currently only used for
-    auditing sellers who aren't distributing enough to nSize. Due to that, 
-    this table is only maintained once per day, during the daily settlement
-    """
-    outfit_id = models.UUIDField(primary_key=True)
-    creator = models.ForeignKey(Resident, on_delete=models.CASCADE)
-    first_seen_time = models.DateTimeField(auto_now_add=True)
-    # box name might change without changing outfit id, but probably not after
-    # being sold. Just in case, update the box_name each day the outfit is seen
-    box_name = models.CharField(max_length=64)
-
-class OutfitProfile(Outfit):
-    """
-    This data will only be filled out by moderators, who will only bother for
-    sellers under audit
-    """
-    slurl = models.URLField(max_length=200, blank=True)
-    marketplace_url = models.URLField(max_length=200, blank=True)
-    price = models.PositiveIntegerField(default=0)
-
-class UnpackEvent(models.Model):
-    outfit = models.ForeignKey(
-        Outfit, 
-        on_delete=models.CASCADE,
-    )
-    creator = models.ForeignKey(
-        Resident, 
-        on_delete=models.CASCADE,
-        related_name='creator_of_unpack',
-    )
-    owner = models.ForeignKey(
-        Resident, 
-        on_delete=models.CASCADE,
-        related_name='owner_of_unpack',
-    )
-    prim_name = models.CharField(max_length=64)
-    slurl = models.URLField(max_length=200)
-    time = models.DateTimeField(auto_now_add=True)
-    grid = models.ForeignKey(Grid, on_delete=models.CASCADE)
-    fiscal_day = models.DateField()
-    class Meta:
-        db_table = 'payroll_unpack_log'
-        indexes = [
-            models.Index(fields=['grid', 'fiscal_day', 'creator']),
-        ]
 
 class DayLedger(models.Model):
     grid = models.ForeignKey(Grid, on_delete=models.CASCADE)
@@ -159,6 +114,7 @@ class DayLedger(models.Model):
     class Meta:
         unique_together = (("grid", "fiscal_day"),)
 
+
 class MyDayLedger(DayLedger):
     """ Computed statistics for the logged in user """
 
@@ -179,6 +135,7 @@ class MyDayLedger(DayLedger):
 
     class Meta:
         managed = False
+
 
 class MonthLedger(models.Model):
     grid = models.ForeignKey(Grid, on_delete=models.CASCADE)
@@ -210,7 +167,7 @@ class MonthLedger(models.Model):
     next_month_gross_budget = models.IntegerField()
     days_in_next_month = models.PositiveSmallIntegerField()
     next_month_daily_budget = models.IntegerField()
-    
+
     # Sales
     sale_count = models.PositiveIntegerField()
     sales_income = models.PositiveIntegerField()
@@ -219,7 +176,7 @@ class MonthLedger(models.Model):
 
     # Unpacks
     unpack_count = models.PositiveIntegerField()
-    unique_outfit_count = models.PositiveIntegerField() 
+    unique_outfit_count = models.PositiveIntegerField()
 
     # Dividends
     total_dividend = models.IntegerField()
@@ -227,6 +184,7 @@ class MonthLedger(models.Model):
 
     class Meta:
         unique_together = (("grid", "first_day"),)
+
 
 class MyMonthLedger(MonthLedger):
     """ Computed statistics for the logged in user """
@@ -247,5 +205,3 @@ class MyMonthLedger(MonthLedger):
 
     class Meta:
         managed = False
-
-

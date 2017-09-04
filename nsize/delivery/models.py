@@ -83,12 +83,12 @@ class DeliveryRequest(BodySpec):
     creator = models.ForeignKey(
         Resident,
         on_delete=models.CASCADE,
-        related_name='creator_of_unpack',
+        related_name='+',
     )
     owner = models.ForeignKey(
         Resident,
         on_delete=models.CASCADE,
-        related_name='owner_of_unpack',
+        related_name='+',
     )
     box_id = models.UUIDField()
     box_name = models.CharField(max_length=64)
@@ -98,6 +98,8 @@ class DeliveryRequest(BodySpec):
     box_pos = fields.ArrayField(models.FloatField(), max_length=3)
     box_rot = fields.ArrayField(models.FloatField(), max_length=4)
     box_vel = fields.ArrayField(models.FloatField(), max_length=3)
+    inventory_count = models.PositiveSmallIntegerField()
+    extra_inventory_count = models.PositiveSmallIntegerField()
     slurl = models.URLField(max_length=200)
     time = models.DateTimeField(auto_now_add=True)
     grid = models.ForeignKey(Grid, on_delete=models.CASCADE)

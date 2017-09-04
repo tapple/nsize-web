@@ -1,12 +1,10 @@
 from rest_framework import serializers
 
-class AttachmentSerializer(serializers.Serializer):
-    pass
-
 class InventorySerializer(serializers.Serializer):
     key = serializers.UUIDField()
     name = serializers.CharField(max_length=64)
-    type = serializers.PositiveSmallIntegerField()
+    """ http://wiki.secondlife.com/wiki/LlGetInventoryType """
+    type = serializers.IntegerField(min_value=0, max_value=21)
     creator_key = serializers.UUIDField()
     base_perms = serializers.IntegerField()
     owner_perms = serializers.IntegerField()
@@ -14,107 +12,63 @@ class InventorySerializer(serializers.Serializer):
     group_perms = serializers.IntegerField()
     everyone_perms = serializers.IntegerField()
 
-    def __str__(self):
-        return self.name
+class OutfitSerializer(serializers.Serializer):
+    """ Probably not needed """
+    outfit_id = models.UUIDField(primary_key=True)
+    creator = models.ForeignKey(Resident, on_delete=models.CASCADE)
+    first_seen_time = models.DateTimeField(auto_now_add=True)
+    # box name might change without changing outfit id, but probably not after
+    # being sold. Just in case, update the box_name each day the outfit is seen
+    box_name = models.CharField(max_length=64)
+
+class GarmentType(serializers.Serializer):
+    id = serializers.IntegerField(min_value=0)
+    name = serializers.CharField(max_length=200)
+
+ class BodyPartSerializer(serializers.Serializer):
+    """ Represents a single body part """
+    id = serializers.IntegerField(min_value=0)
+    name = serializers.CharField(max_length=64)
+
+class BodyPartsSerializer(serializers.Serializer):
+    """ Represents a whole avatar """
+    avatar = BodyPartSerializer()
+    mods = serializers.ListField(child=BodyPartSerializer)
+
+class OutfitServerSerializer(serializers.Serializer):
+    """ Authentication information for the outfit server """
+    nonce = serializers.CharField()
+    signature = serializers.CharField()
+    url = serializers.URLField()
+
+class DeliveryRequestSerializer(serializers.Serializer):
+    box_url = serializers.URLField()
+    outfit_server = OutfitSerializer()
+    body_parts = BodyPartsSerializer()
+    inventory = serializers.ListField(child=InventorySerializer)
+    outfit_id = serializers.UUIDField()
+    creator_id = serializers.UUIDField()
+    region_hostname = serializers.CharField()
+    outfitComponents = serializers.ListField(child=GarmentType)
 
 """
-class DeliveryRequest(models.Model):
-    session_id = models.UUIDField()
-    owner_id = models.UUIDField()
-    outfit_id = models.UUIDField()
-    prim_id = models.UUIDField()
-    prim_name = models.CharField(max_length=64)
-    prim_url = models.URLField()
-    prim_pos = models.CharField()
-    region_name = models.CharField(max_length=64)
-    region_hostname = models.URLField()
-    outfit_url = models.URLField()
-    outfit_nonce = models.IntegerField()
+box_name = models.CharField(max_length=64)
+region_name = models.CharField(max_length=32)
+region_pos = fields.ArrayField(models.IntegerField(), max_length=2)
+region_hostname = models.URLField(max_length=200)
+box_pos = fields.ArrayField(models.FloatField(), max_length=3)
+box_rot = fields.ArrayField(models.FloatField(), max_length=4)
+box_vel = fields.ArrayField(models.FloatField(), max_length=3)
+inventory_count = models.PositiveSmallIntegerField()
+extra_inventory_count = models.PositiveSmallIntegerField()
+slurl = models.URLField(max_length=200)
+time = models.DateTimeField(auto_now_add=True)
+grid = models.ForeignKey(Grid, on_delete=models.CASCADE)
+fiscal_day = models.DateField()
+"""
 
-    def __str__(self):
-        return self.name
 
-///////////////////////////////////////////////////////////////
-///////////////////// Data Gathering //////////////////////////
-///////////////////////////////////////////////////////////////
-
-//*
-// As of 2017-06-13, up to 38 attachments can be worn per agent
-// max of 328 bytes per attach point (if name and description are maxed out).
-//     x38 = 12464 bytes
-// without descriptions: 188 * 38 = 7144 bytes top
-// I measured a real outfit with 38 attachments; it's json encoding was 6877 bytes
-string avatarAttachmentsJson(key id) {
-    list ans = [];
-    list attachments = llGetAttachedList(id);
-debug((string)llGetListLength(attachments) + " attachments");
-    integer i;
-    for (i = llGetListLength(attachments) - 1; i >= 0; i--) {
-        key attachment = llList2Key(attachments, i);
-        list details = llGetObjectDetails(attachment, [OBJECT_NAME, OBJECT_DESC, OBJECT_CREATOR, OBJECT_ATTACHED_POINT]);
-        ans = [llList2Json(JSON_OBJECT, [
-            "id", attachment, // 6+2+36 = 44 bytes
-            "name", llList2String(details, 0), // 6+4+64 = 74 bytes
-            "desc", llList2String(details, 1), // 6+4+128 = 140 bytes
-            "creator", llList2String(details, 2), // 6+7+36 = 49 bytes
-            "attachPoint", llList2String(details, 3) // 6+11+2 = 19 bytes
-        ])] + ans;
-    }
-    return llList2Json(JSON_ARRAY, ans);
-}
-
-// 310 bytes per inventory item with all perms (33 items in 10kB)
-// 207 bytes per item with only base perms (49 items in 10kB)
-// 110 bytes per item with only name, type, perms (93 items in 10kB)
-string extraInventoryJson() {
-//    list exceptions = [llGetScriptName(), NOTECARD_NAME, CREATOR_PRIM];
-    list inv = [];
-    integer i;
-    for (i = llGetInventoryNumber(INVENTORY_ALL)-1; i >= 0; --i) {
-        string item = llGetInventoryName(INVENTORY_ALL, i);
-        inv = [llList2Json(JSON_OBJECT, [
-            "key", llGetInventoryKey(item), // 6+3+36 = 45 bytes
-            "name", item, // 6+4+64 = 74 bytes
-            "type", llGetInventoryType(item), // 6+4+2 = 12 bytes
-            "creatorKey", llGetInventoryCreator(item), // 6+10+36 = 52 bytes
-            "basePerms", llGetInventoryPermMask(item, MASK_BASE), // 4+9+10 = 23
-            "ownerPerms", llGetInventoryPermMask(item, MASK_OWNER), // 4+10+10 = 24
-            "nextOwnerPerms", llGetInventoryPermMask(item, MASK_NEXT), // 4+14+10 = 28
-            "groupPerms", llGetInventoryPermMask(item, MASK_GROUP), // 4+10+10 = 24
-            "everyonePerms", llGetInventoryPermMask(item, MASK_EVERYONE) // 4+13+10 = 27
-            //"dataKey", llRequestInventoryData(item), // 1 second delay to get landmark dest
-        ])] + inv;
-    }
-    return llList2Json(JSON_ARRAY, inv);
-}
-
-string mainServerRequest() {
-    vector pos = llGetPos();
-    list request = [
-        "sessionId", sessionId,
-        "outfitId", outfitId,
-        "primId", llGetKey(),
-        "primName", llGetObjectName(),
-        "primUrl", url,
-        "primPos", llList2Json(JSON_ARRAY, [pos.x, pos.y, pos.z]),
-        "regionName", llGetRegionName(),
-        "regionHostname", llGetEnv("simulator_hostname"),
-//        "hasCreatorPrim", llGetInventoryType(CREATOR_PRIM) == INVENTORY_OBJECT,
-/* Not sure yet if these should be set by the box or the server
-        "outfitFolderName", llGetObjectName() + " (Outfit)",
-        "extrasFolderName", llGetObjectName() + " (Extras)",
-        "fullFolderName", llGetObjectName(),
-//*/
-//        "avatarAttachments", avatarAttachmentsJson(llGetOwner()),
-        "extraInventory", extraInventoryJson()
-    ];
-    request += ["outfitComponents", "[]"];
-    if (SHOULD_SEND_TEXTURES) {
-        request += ["outfitUrlKey", ""];
-    }
-    return llList2Json(JSON_OBJECT, request);
-}
-
+"""
 ///////////////////////////////////////////////////////////////
 //////////////////////// HTTP API /////////////////////////////
 ///////////////////////////////////////////////////////////////

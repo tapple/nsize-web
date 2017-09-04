@@ -14,4 +14,5 @@ httpie==0.9.9
 #pycrypto==2.6.1
 
 # Deployment
+awscli==1.11.144
 awsebcli==3.10.6

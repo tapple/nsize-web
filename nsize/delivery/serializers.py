@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+
 class InventorySerializer(serializers.Serializer):
     key = serializers.UUIDField()
     name = serializers.CharField(max_length=64)
@@ -12,28 +13,23 @@ class InventorySerializer(serializers.Serializer):
     group_perms = serializers.IntegerField()
     everyone_perms = serializers.IntegerField()
 
-class OutfitSerializer(serializers.Serializer):
-    """ Probably not needed """
-    outfit_id = models.UUIDField(primary_key=True)
-    creator = models.ForeignKey(Resident, on_delete=models.CASCADE)
-    first_seen_time = models.DateTimeField(auto_now_add=True)
-    # box name might change without changing outfit id, but probably not after
-    # being sold. Just in case, update the box_name each day the outfit is seen
-    box_name = models.CharField(max_length=64)
 
 class GarmentType(serializers.Serializer):
     id = serializers.IntegerField(min_value=0)
     name = serializers.CharField(max_length=200)
 
- class BodyPartSerializer(serializers.Serializer):
+
+class BodyPartSerializer(serializers.Serializer):
     """ Represents a single body part """
     id = serializers.IntegerField(min_value=0)
     name = serializers.CharField(max_length=64)
 
+
 class BodyPartsSerializer(serializers.Serializer):
     """ Represents a whole avatar """
-    avatar = BodyPartSerializer()
-    mods = serializers.ListField(child=BodyPartSerializer)
+    body = BodyPartSerializer()
+    mods = serializers.ListField(child=BodyPartSerializer())
+
 
 class OutfitServerSerializer(serializers.Serializer):
     """ Authentication information for the outfit server """
@@ -41,15 +37,17 @@ class OutfitServerSerializer(serializers.Serializer):
     signature = serializers.CharField()
     url = serializers.URLField()
 
+
 class DeliveryRequestSerializer(serializers.Serializer):
-    box_url = serializers.URLField()
-    outfit_server = OutfitSerializer()
+    box_server_url = serializers.URLField()
+    outfit_server = OutfitServerSerializer()
     body_parts = BodyPartsSerializer()
-    inventory = serializers.ListField(child=InventorySerializer)
+    inventory = serializers.ListField(child=InventorySerializer())
     outfit_id = serializers.UUIDField()
     creator_id = serializers.UUIDField()
     region_hostname = serializers.CharField()
-    outfitComponents = serializers.ListField(child=GarmentType)
+    outfit_components = serializers.ListField(child=GarmentType())
+
 
 """
 box_name = models.CharField(max_length=64)
@@ -66,7 +64,6 @@ time = models.DateTimeField(auto_now_add=True)
 grid = models.ForeignKey(Grid, on_delete=models.CASCADE)
 fiscal_day = models.DateField()
 """
-
 
 """
 ///////////////////////////////////////////////////////////////
@@ -101,6 +98,3 @@ For maximum evolvability, This box script has almost no business logic; it is ju
 
 
 """
-
-
-

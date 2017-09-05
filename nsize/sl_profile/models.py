@@ -1,4 +1,6 @@
 from django.db import models
+from . import util
+from . import scraper
 
 
 class Grid(models.Model):
@@ -37,6 +39,34 @@ class Resident(models.Model):
         return self.name
 
     @classmethod
+    def _create_secondlife_resident(cls, grid, key=None, name=None):
+        """ Cache the resident by scraping the secondlife.com website """
+        resident = scraper.get_resident(key=key, name=name)
+        if not resident:
+            raise cls.DoesNotExist
+        (name, display_name) = util.parse_fullname(resident.full_name)
+        return cls.objects.create(grid=grid, key=resident.key, name=name)
+
+    @classmethod
     def get(cls, grid, key=None, name=None):
-        from .util import get_resident # circular module dependency if declared at top
-        return get_resident(grid, key, name)
+        """
+        Find a resident by key or name. Searches first in the database. If not found, screen-scrapes secondlife.com
+        and stores it in the database
+        """
+        if name:
+            name = util.to_username(name)
+        # first, see if it's already in the database (fast)
+        try:
+            if key:
+                return cls.objects.get(grid=grid, key=key)
+            elif name:
+                return cls.objects.get(grid=grid, name=name)
+            else:
+                raise ValueError('key or name must be specified')
+        except cls.DoesNotExist:
+            pass
+        # otherwise, need to call the screen scraper
+        if grid.nick in ('agni', 'aditi'):
+            return cls._create_secondlife_resident(grid, key, name)
+        else:
+            raise NotImplementedError('Resident lookup is not implemented for grids other than Second Life')

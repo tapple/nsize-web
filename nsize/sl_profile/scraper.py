@@ -7,12 +7,13 @@ import requests
 import backoff
 from bs4 import BeautifulSoup
 
+from . import util
+
 SL_WORLD_BASE_URL = 'http://world.secondlife.com/resident/'
 SL_MARKETPLACE_BASE_URL = 'https://marketplace.secondlife.com'
 SLURL_BASE = 'http://maps.secondlife.com/secondlife/'
 
 SESSION = requests.Session()
-
 
 @backoff.on_exception(backoff.expo,
                       (requests.exceptions.Timeout,
@@ -24,35 +25,55 @@ def get_url(url):
     return BeautifulSoup(r.text, "lxml")
 
 
-def find_avatar_key(name):
+def resident_name_search(name):
     """
     Searches SL for the key of an avatar with the given name. Returns a
-    list of potential UUID's
+    list of potential UUID's, along with their full name.
     """
+    Resident = namedtuple("Resident", 'key full_name')
     url_re = re.compile(SL_WORLD_BASE_URL + '(.*)')
     soup = get_url('http://search.secondlife.com/client_search.php?q=' + quote(name))
     tags = soup('a', href=url_re)
-    return [UUID(url_re.match(tag.attrs['href']).group(1)) for tag in tags]
+    return [Resident(
+        UUID(url_re.match(tag.attrs['href']).group(1)),
+        tag.string.strip(),
+    ) for tag in tags]
 
 
-def avatar_info(key):
+def resident_info(key):
     """
     returns the (name, image url, description) of the given avatar key
     using the SL World API
     """
-    Info = namedtuple("Info", 'full name img_url description')
+    ResidentInfo = namedtuple("ResidentInfo", 'key full_name img_url description')
     try:
         soup = get_url(SL_WORLD_BASE_URL + str(key))
     except requests.HTTPError as err:
-        if err.request.status_code == requests.codes.not_found:
+        if err.response.status_code == requests.codes.not_found:
             return None
         else:
             raise
-    return Info(
+    return ResidentInfo(
+        key,
         soup.find('title').string,
         soup.find('img', class_='parcelimg').attrs['src'],
         soup.find('meta', attrs={'name': 'description'}).attrs['content'],
     )
+
+
+def get_resident(key=None, name=None):
+    """ look up a resident by key or username. name must be normalized to first.last form """
+    if key:
+        # even if name is also given, don't trust it. Look it up
+        return resident_info(key)
+    elif name:
+        for resident in resident_name_search(name):
+            resident_name, display_name = util.parse_fullname(resident.full_name)
+            if name == resident_name:
+                return resident
+    else:
+        raise ValueError('key or name must be specified')
+    return None
 
 
 def find_marketplace_store(name):

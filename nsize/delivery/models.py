@@ -79,6 +79,7 @@ class DeliveryRequest(BodySpec):
     outfit = models.ForeignKey(
         Outfit,
         on_delete=models.CASCADE,
+        related_name='+',
     )
     creator = models.ForeignKey(
         Resident,

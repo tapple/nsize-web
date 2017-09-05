@@ -2,11 +2,12 @@ from django.db import models
 
 
 class Grid(models.Model):
-    name = models.CharField(max_length=200)
-    hostname_suffix = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
+    nick = models.CharField(max_length=200)
+    region_domain = models.CharField(max_length=200, null=True)
 
     def __str__(self):
-        return self.grid_name
+        return "name=%r, nick=%r, region_domain=%r" % (self.name, self.nick, self.region_domain)
 
 
 class Resident(models.Model):

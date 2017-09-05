@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/profile/', include('sl_profile.urls')),
     url(r'^api/lsl_gateway/', include('sl_cap_gateway.urls')),
+    url(r'^api/delivery/', include('delivery.urls')),
 ]

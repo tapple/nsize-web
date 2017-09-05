@@ -59,7 +59,7 @@ class Common(Configuration):
     )
 
     # Postgres
-    DATABASES = values.DatabaseURLValue('postgres://localhost/nsize')
+    DATABASES = values.DatabaseURLValue('sqlite://nsize-test')
 
     # General
     APPEND_SLASH = values.BooleanValue(False)

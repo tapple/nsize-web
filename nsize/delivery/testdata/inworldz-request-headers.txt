@@ -1,0 +1,22 @@
+Accept-Encoding: gzip
+Cf-Connecting-Ip: 198.61.243.158
+Cf-Ipcountry: US
+Cf-Ray: 3994bdf06f1371a9-ORD
+Cf-Visitor: {"scheme":"https"}
+Connection: close
+Connect-Time: 0
+Content-Type: text/plain;charset=utf-8
+Host: requestb.in
+Total-Route-Time: 0
+User-Agent: InWorldz LSL/0.9.36.6427 (Mozilla Compatible)
+Via: 1.1 vegur
+X-Request-Id: 53c60ddd-f732-466e-b175-dd4b669e746c
+X-Secondlife-Local-Position: (75.626270, 80.646590, 23.240220)
+X-Secondlife-Local-Rotation: (-0.003345, -0.034739, -0.008718, 0.999353)
+X-Secondlife-Local-Velocity: (0.000000, 0.000000, 0.000000)
+X-Secondlife-Object-Key: a4da99a6-8f0d-43ae-a12b-182865aa7b13
+X-Secondlife-Object-Name: Tiny Purple Kangaroo Body
+X-Secondlife-Owner-Key: dbc31651-6bc8-4e07-bff6-063f2f6e3f40
+X-Secondlife-Owner-Name: Tapple Gao
+X-Secondlife-Region: Dreamhunter (992, 964)
+X-Secondlife-Shard: Production

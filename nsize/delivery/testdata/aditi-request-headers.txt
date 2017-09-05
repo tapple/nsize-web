@@ -1,0 +1,24 @@
+Accept-Charset: utf-8;q=1.0, *;q=0.5
+Accept-Encoding: gzip
+Accept: text/*, application/xhtml+xml, application/atom+xml, application/json, application/xml, application/llsd+xml, application/x-javascript, application/javascript, application/x-www-form-urlencoded, application/rss+xml
+Cf-Connecting-Ip: 216.82.48.74
+Cf-Ipcountry: US
+Cf-Ray: 3994c290fb5777e4-LAX
+Cf-Visitor: {"scheme":"https"}
+Connection: close
+Connect-Time: 1
+Host: requestb.in
+Pragma: no-cache
+Total-Route-Time: 0
+User-Agent: Second-Life-LSL/17.08.21.328418 (https://secondlife.com)
+Via: 1.1 vegur
+X-Request-Id: 13f8d4d7-6363-4b66-97b3-78dd9d312be5
+X-Secondlife-Local-Position: (105.540001, 84.627998, 22.650000)
+X-Secondlife-Local-Rotation: (0.000000, 0.000000, 0.001144, 0.999999)
+X-Secondlife-Local-Velocity: (0.000000, 0.000000, 0.000000)
+X-Secondlife-Object-Key: 68068844-cd57-76a6-a2ff-e927b2b54170
+X-Secondlife-Object-Name: lightning HUD (kid size)
+X-Secondlife-Owner-Key: 79f70eef-cb35-42a9-bfcb-3ae85acd0331
+X-Secondlife-Owner-Name: PippinGao Resident
+X-Secondlife-Region: Mesh Sandbox 1 (205312, 178688)
+X-Secondlife-Shard: Testing

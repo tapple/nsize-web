@@ -1,0 +1,22 @@
+Accept-Encoding: gzip
+Cf-Connecting-Ip: 8.30.124.133
+Cf-Ipcountry: US
+Cf-Ray: 3994e88fef981828-MIA
+Cf-Visitor: {"scheme":"https"}
+Connection: close
+Connect-Time: 0
+Content-Type: text/plain;charset=utf-8
+Host: requestb.in
+Total-Route-Time: 0
+User-Agent: OpenSim LSL (Mozilla Compatible)
+Via: 1.1 vegur
+X-Request-Id: 9c3be9a4-90e1-483e-b649-4e400dcca65a
+X-Secondlife-Local-Position: (128.069000, 58.054600, 23.009440)
+X-Secondlife-Local-Rotation: (0.000000, 0.000000, 0.000000, 1.000000)
+X-Secondlife-Local-Velocity: (0.000000, 0.000000, 0.000000)
+X-Secondlife-Object-Key: 7ef4c981-24bd-4a08-b77d-95286b19ab4f
+X-Secondlife-Object-Name: Sara Hair
+X-Secondlife-Owner-Key: 3d07a619-c19f-4be4-932e-bad0e73961fa
+X-Secondlife-Owner-Name: Tapple Gao
+X-Secondlife-Region: Welcome (1004, 1010)
+X-Secondlife-Shard: OpenSim

@@ -1,0 +1,24 @@
+Accept-Charset: utf-8;q=1.0, *;q=0.5
+Accept-Encoding: gzip
+Accept: text/*, application/xhtml+xml, application/atom+xml, application/json, application/xml, application/llsd+xml, application/x-javascript, application/javascript, application/x-www-form-urlencoded, application/rss+xml
+Cf-Connecting-Ip: 216.82.45.117
+Cf-Ipcountry: US
+Cf-Ray: 3994b5029ff67700-LAX
+Cf-Visitor: {"scheme":"https"}
+Connection: close
+Connect-Time: 0
+Host: requestb.in
+Pragma: no-cache
+Total-Route-Time: 0
+User-Agent: Second-Life-LSL/17.08.11.328152 (https://secondlife.com)
+Via: 1.1 vegur
+X-Request-Id: e3e838c5-7f9d-46d7-a5be-b65af173f86d
+X-Secondlife-Local-Position: (134.370819, 137.538330, 23.074175)
+X-Secondlife-Local-Rotation: (-0.000046, -0.016007, 0.391322, 0.920115)
+X-Secondlife-Local-Velocity: (0.000000, 0.000000, 0.000000)
+X-Secondlife-Object-Key: 5a1b9b6f-2793-bbd1-5daf-5cbf0749ceae
+X-Secondlife-Object-Name: nSize Fake Box
+X-Secondlife-Owner-Key: a98362e9-bb71-45d0-aebe-3f0184f934fc
+X-Secondlife-Owner-Name: Tapple Gao
+X-Secondlife-Region: Lost Farm (172032, 324864)
+X-Secondlife-Shard: Production

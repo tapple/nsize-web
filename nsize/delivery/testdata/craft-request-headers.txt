@@ -1,0 +1,22 @@
+Accept-Encoding: gzip
+Cf-Connecting-Ip: 164.132.204.19
+Cf-Ipcountry: FR
+Cf-Ray: 3994f70f4b3d14e5-CDG
+Cf-Visitor: {"scheme":"https"}
+Connection: close
+Connect-Time: 0
+Content-Type: text/plain;charset=utf-8
+Host: requestb.in
+Total-Route-Time: 0
+User-Agent: OpenSim LSL (Mozilla Compatible)
+Via: 1.1 vegur
+X-Request-Id: 98a5d10d-f121-4bca-ae3c-e034c9cb9824
+X-Secondlife-Local-Position: (81.212100, 128.004000, 22.376140)
+X-Secondlife-Local-Rotation: (0.000000, 0.000000, 0.000000, 1.000000)
+X-Secondlife-Local-Velocity: (0.000000, 0.000000, 0.000000)
+X-Secondlife-Object-Key: d71d0813-9142-4fc8-82e5-e939ba0db67f
+X-Secondlife-Object-Name: capelli lunghi rosso fiamma
+X-Secondlife-Owner-Key: 17899533-016b-a414-d232-2db9c49ab08a
+X-Secondlife-Owner-Name: Tapple Gao
+X-Secondlife-Region: Hydra (10000, 9991)
+X-Secondlife-Shard: OpenSim

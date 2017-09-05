@@ -1,0 +1,21 @@
+Accept-Encoding: gzip
+Cf-Connecting-Ip: 72.223.42.73
+Cf-Ipcountry: US
+Cf-Ray: 399522ba1e603982-PHX
+Cf-Visitor: {"scheme":"https"}
+Connection: close
+Connect-Time: 2
+Content-Type: text/plain;charset=utf-8
+Host: requestb.in
+Total-Route-Time: 0
+Via: 1.1 vegur
+X-Request-Id: c1076e1a-655b-41ef-99ad-aa89957c0c56
+X-Secondlife-Local-Position: (466.699000, 176.158000, 23.206130)
+X-Secondlife-Local-Rotation: (0.000000, -0.707107, 0.000000, 0.707107)
+X-Secondlife-Local-Velocity: (0.000000, 0.000000, 0.000000)
+X-Secondlife-Object-Key: 258309bb-e03f-412e-ae53-8c29d4148dda
+X-Secondlife-Object-Name: cat furry - head
+X-Secondlife-Owner-Key: df7b2a41-e635-45a9-b7c4-aeef4213b05f
+X-Secondlife-Owner-Name: Tapple Gao
+X-Secondlife-Region: Island Oasis (6999, 6998)
+X-Secondlife-Shard: OpenSim

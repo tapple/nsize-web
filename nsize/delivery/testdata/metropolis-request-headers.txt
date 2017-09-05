@@ -1,0 +1,22 @@
+Accept-Encoding: gzip
+Cf-Connecting-Ip: 136.243.11.195
+Cf-Ipcountry: DE
+Cf-Ray: 3995394bab5e2324-FRA
+Cf-Visitor: {"scheme":"https"}
+Connection: close
+Connect-Time: 1
+Content-Type: text/plain;charset=utf-8
+Host: requestb.in
+Total-Route-Time: 0
+User-Agent: OpenSim LSL (Mozilla Compatible)
+Via: 1.1 vegur
+X-Request-Id: e327842a-557b-4d00-9827-f318382b6cde
+X-Secondlife-Local-Position: (139.000000, 122.500000, 113.775700)
+X-Secondlife-Local-Rotation: (0.016393, -0.005276, 0.012073, 0.999779)
+X-Secondlife-Local-Velocity: (0.000000, 0.000000, 0.000000)
+X-Secondlife-Object-Key: 09416054-6e47-48bb-be2a-e9e78a75272b
+X-Secondlife-Object-Name: Lyra Hair
+X-Secondlife-Owner-Key: e2ad2a91-d3ba-451a-82ec-a890cd3e7bda
+X-Secondlife-Owner-Name: Tapple Gao
+X-Secondlife-Region: *Metropolis* (4998, 6985)
+X-Secondlife-Shard: OpenSim

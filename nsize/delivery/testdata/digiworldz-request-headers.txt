@@ -1,0 +1,22 @@
+Accept-Encoding: gzip
+Cf-Connecting-Ip: 192.227.64.55
+Cf-Ipcountry: US
+Cf-Ray: 399504823cc6532c-MIA
+Cf-Visitor: {"scheme":"https"}
+Connection: close
+Connect-Time: 1
+Content-Type: text/plain;charset=utf-8
+Host: requestb.in
+Total-Route-Time: 0
+User-Agent: DWG-OpenSim LSL (Mozilla Compatible)
+Via: 1.1 vegur
+X-Request-Id: 249ff4d9-f5ca-425e-bd26-16d6a72c8a94
+X-Secondlife-Local-Position: (128.470000, 127.045000, 23.301150)
+X-Secondlife-Local-Rotation: (0.000000, 0.000000, 0.000000, 1.000000)
+X-Secondlife-Local-Velocity: (0.000000, 0.000000, 0.000000)
+X-Secondlife-Object-Key: ed3b4f3d-895c-41fd-a7e7-0e66f24181c8
+X-Secondlife-Object-Name: DigiGuy1- Mesh Shirt
+X-Secondlife-Owner-Key: 6fe4de76-948f-4688-a136-e773895f9fb4
+X-Secondlife-Owner-Name: Tapple Gao
+X-Secondlife-Region: Welcome (30000, 30000)
+X-Secondlife-Shard: DWG-OpenSim

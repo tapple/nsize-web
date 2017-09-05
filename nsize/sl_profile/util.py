@@ -4,9 +4,21 @@ import re
 FULLNAME_REGEX = re.compile(r'(.*) \((.*)\)')
 
 def to_username(legacy_name):
-    """ Normalizes a name to username form: lowercase, replace space with dots """
-    return legacy_name.lower().replace(' ', '.')
+    """
+    Normalizes a name to username form: lowercase, replace space with dots:
+    to_username('Tapple Gao') >>> 'tapple.gao'
+    to_username('tapple.gao') >>> 'tapple.gao'
+    to_username('PippinGao Resident') >>> 'pippingao'
+    """
+    user_name = legacy_name.lower().replace(' ', '.')
+    if user_name.endswith(".resident"):
+        user_name = user_name[:-9]
+    return user_name
 
+
+# FIXME: I wonder what happens when the display name actually ends with 'Resident'...
+# I should probably actually check that this algorithm matches the viewer code.
+# It's currently just reverse-engineered
 
 def parse_fullname(full_name):
     """

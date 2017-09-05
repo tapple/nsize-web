@@ -67,6 +67,12 @@ class NameParserTestCase(unittest.TestCase):
     def test_to_username_2(self):
         self.assertEqual(util.to_username('tapple.gao'), 'tapple.gao')
 
+    def test_to_username_3(self):
+        self.assertEqual(util.to_username('PippinGao'), 'pippingao')
+
+    def test_to_username_4(self):
+        self.assertEqual(util.to_username('PippinGao Resident'), 'pippingao')
+
     def test_to_fullname_1(self):
         self.assertEqual(
                 util.to_fullname('tapple.gao', 'Tapple Gao'),
@@ -74,8 +80,8 @@ class NameParserTestCase(unittest.TestCase):
 
     def test_to_fullname_2(self):
         self.assertEqual(
-                util.to_fullname('tapple.gao', 'Pippin Gao'),
-                'Pippin Gao (tapple.gao)')
+                util.to_fullname('pippingao', 'Pippin Gao'),
+                'Pippin Gao (pippingao)')
 
     def test_parse_fullname_1(self):
         parsed = util.parse_fullname('Tapple Gao')

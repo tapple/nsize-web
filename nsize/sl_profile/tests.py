@@ -79,13 +79,13 @@ class NameParserTestCase(unittest.TestCase):
 
     def test_parse_fullname_1(self):
         parsed = util.parse_fullname('Tapple Gao')
-        self.assertEqual(parsed.userName, 'tapple.gao')
-        self.assertEqual(parsed.displayName, 'Tapple Gao'),
+        self.assertEqual(parsed.user_name, 'tapple.gao')
+        self.assertEqual(parsed.display_name, 'Tapple Gao'),
 
     def test_parse_fullname_2(self):
         parsed = util.parse_fullname('Pippin Gao (tapple.gao)')
-        self.assertEqual(parsed.userName, 'tapple.gao'),
-        self.assertEqual(parsed.displayName, 'Pippin Gao'),
+        self.assertEqual(parsed.user_name, 'tapple.gao'),
+        self.assertEqual(parsed.display_name, 'Pippin Gao'),
 
 
 class GetResidentTest(TestCase):

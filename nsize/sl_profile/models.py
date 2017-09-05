@@ -44,8 +44,11 @@ class Resident(models.Model):
         resident = scraper.get_resident(key=key, name=name)
         if not resident:
             raise cls.DoesNotExist
-        (name, display_name) = util.parse_fullname(resident.full_name)
-        return cls.objects.create(grid=grid, key=resident.key, name=name)
+        return cls.objects.create(
+            grid=grid,
+            key=resident.key,
+            name=util.parse_fullname(resident.full_name).user_name,
+        )
 
     @classmethod
     def get(cls, grid, key=None, name=None):

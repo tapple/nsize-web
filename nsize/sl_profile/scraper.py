@@ -27,8 +27,9 @@ def get_url(url):
 
 def resident_name_search(name):
     """
-    Searches SL for the key of an avatar with the given name. Returns a
-    list of potential UUID's, along with their full name.
+    Searches SL for the key of an avatar with the given name.
+    Seems to accept user names, legacy names, and display names. Returns a
+    list of (uuid, full name) pairs of match results
     """
     Resident = namedtuple("Resident", 'key full_name')
     url_re = re.compile(SL_WORLD_BASE_URL + '(.*)')
@@ -62,14 +63,16 @@ def resident_info(key):
 
 
 def get_resident(key=None, name=None):
-    """ look up a resident by key or username. name must be normalized to first.last form """
+    """
+    look up a resident by key or username. name must be normalized to first.last form.
+    Returns a tuple containing at least key and full_name
+    """
     if key:
         # even if name is also given, don't trust it. Look it up
         return resident_info(key)
     elif name:
         for resident in resident_name_search(name):
-            resident_name, display_name = util.parse_fullname(resident.full_name)
-            if name == resident_name:
+            if name == util.parse_fullname(resident.full_name).user_name:
                 return resident
     else:
         raise ValueError('key or name must be specified')

@@ -1,6 +1,18 @@
 from django.db import models
+import requests
+
 from . import util
 from . import scraper
+
+# FIXME: this url should probably be a configuration thing
+LSL_GATEWAY = 'http://nsize-dev.us-west-1.elasticbeanstalk.com/api/lsl_gateway/'
+
+
+def get_legacy_name(grid, key):
+    """ calls an in-world gateway that returns llRequestAgentData(key, DATA_NAME) """
+    response = requests.get('%s/cap/%s/dataserver/llRequestAgentData/%s/2/' % (LSL_GATEWAY, grid.nick, key))
+    response.raise_for_status()
+    return response.text
 
 
 class Grid(models.Model):
@@ -34,27 +46,36 @@ class Resident(models.Model):
     # normalized: all lowercase, space replaced with .
     name = models.CharField(max_length=64, db_index=True)
     grid = models.ForeignKey(Grid, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=64)
+    last_name = models.CharField(max_length=64)
 
     def __str__(self):
         return self.name
 
     @classmethod
     def _create_secondlife_resident(cls, grid, key=None, name=None):
-        """ Cache the resident by scraping the secondlife.com website """
+        """
+        Cache the resident by scraping the secondlife.com website.
+        name must be normalized to first.last
+        """
         resident = scraper.get_resident(key=key, name=name)
         if not resident:
             raise cls.DoesNotExist
+        legacy_name = get_legacy_name(grid, resident.key)
+        first_name, last_name = util.parse_legacy_name(legacy_name)
         return cls.objects.create(
             grid=grid,
             key=resident.key,
             name=util.parse_fullname(resident.full_name).user_name,
+            first_name=first_name,
+            last_name=last_name,
         )
 
     @classmethod
     def get(cls, grid, key=None, name=None):
         """
         Find a resident by key or name. Searches first in the database. If not found, screen-scrapes secondlife.com
-        and stores it in the database
+        and stores it in the database. name can be in either username or legacy form, if given
         """
         if name:
             name = util.to_username(name)

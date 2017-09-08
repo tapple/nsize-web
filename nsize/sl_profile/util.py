@@ -3,6 +3,10 @@ import re
 
 FULLNAME_REGEX = re.compile(r'(.*) \((.*)\)')
 
+
+# Note: legacy_name cannot be reconstructed from username; the capitalization was stripped. The only way to get
+# legacy name is via lsl llRequestAgentData(key, DATA_NAME)
+
 def to_username(legacy_name):
     """
     Normalizes a name to username form: lowercase, replace space with dots:
@@ -14,6 +18,19 @@ def to_username(legacy_name):
     if user_name.endswith(".resident"):
         user_name = user_name[:-9]
     return user_name
+
+
+def parse_legacy_name(legacy_name):
+    """
+    Seperate first and last name in legacy name
+    parse_legacy_name('Tapple Gao') >>> ('Tapple', 'Gao')
+    parse_legacy_name('PippinGao Resident') >>> ('PippinGao', 'Resident')
+    """
+    ParsedName = namedtuple("ParsedName", 'first_name last_name')
+    split_name = legacy_name.split(' ')
+    if len(split_name) != 2:
+        raise ValueError('%s is not of the form "first_name last_name"' % (legacy_name,))
+    return ParsedName(*legacy_name.split(' '))
 
 
 # FIXME: I wonder what happens when the display name actually ends with 'Resident'...

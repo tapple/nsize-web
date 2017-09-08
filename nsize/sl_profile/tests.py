@@ -83,6 +83,24 @@ class NameParserTestCase(unittest.TestCase):
                 util.to_fullname('pippingao', 'Pippin Gao'),
                 'Pippin Gao (pippingao)')
 
+    def test_parse_legacy_name_1(self):
+        parsed = util.parse_legacy_name('Tapple Gao')
+        self.assertEqual(parsed.first_name, 'Tapple')
+        self.assertEqual(parsed.last_name, 'Gao'),
+
+    def test_parse_legacy_name_2(self):
+        parsed = util.parse_legacy_name('PippinGao Resident')
+        self.assertEqual(parsed.first_name, 'PippinGao')
+        self.assertEqual(parsed.last_name, 'Resident'),
+
+    def test_parse_legacy_name_3(self):
+        with self.assertRaises(ValueError):
+            util.parse_legacy_name('PippinGao')
+
+    def test_parse_legacy_name_4(self):
+        with self.assertRaises(ValueError):
+            util.parse_legacy_name('Pippin Gao (pippin.gao)')
+
     def test_parse_fullname_1(self):
         parsed = util.parse_fullname('Tapple Gao')
         self.assertEqual(parsed.user_name, 'tapple.gao')
@@ -100,15 +118,27 @@ class GetResidentTest(TestCase):
         self.tapple_key = UUID('a98362e9-bb71-45d0-aebe-3f0184f934fc')
         self.tapple_name = 'tapple.gao'
         self.tapple_legacy_name = 'Tapple Gao'
+        self.tapple_first_name = 'Tapple'
+        self.tapple_last_name = 'Gao'
 
     def create_tapple(self):
         self.assertEqual(Resident.objects.count(), 0)
-        return Resident.objects.create(grid=self.secondlife, key=self.tapple_key, name=self.tapple_name)
+        resident = Resident.objects.create(
+            grid=self.secondlife,
+            key=self.tapple_key,
+            name=self.tapple_name,
+            first_name=self.tapple_first_name,
+            last_name=self.tapple_last_name,
+        )
+        self.assertTapple(resident)
+        return resident
 
     def assertTapple(self, resident):
         self.assertEqual(resident.grid, self.secondlife)
         self.assertEqual(resident.key, self.tapple_key)
         self.assertEqual(resident.name, self.tapple_name)
+        self.assertEqual(resident.first_name, self.tapple_first_name)
+        self.assertEqual(resident.last_name, self.tapple_last_name)
 
     def test_get_present_by_valid_key(self):
         tapple = self.create_tapple()

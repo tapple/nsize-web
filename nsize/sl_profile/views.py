@@ -1,14 +1,14 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from . import scraper
+from . import scraper, util
 
 class FindAvatarKey(APIView):
     """
     Search for named avatars and return a list of matching keys
     """
     def get(self, request, name, format=None):
-        keys = scraper.find_avatar_key(name)
+        keys = scraper.resident_name_search(name)
         return Response(keys)
 
 class AvatarInfo(APIView):
@@ -16,8 +16,8 @@ class AvatarInfo(APIView):
     Return full name, user name, display name, image url, description of the given uuid
     """
     def get(self, request, uuid, format=None):
-        info = scraper.avatar_info(uuid)
-        names = scraper.parse_fullname(info.fullName)
+        info = scraper.resident_info(uuid)
+        names = util.parse_fullname(info.fullName)
         #return Response({**info._asdict(), **names._asdict()}) # Only in Python 3.5+
         response = info._asdict()
         response.update(names._asdict())

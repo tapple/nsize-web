@@ -1,4 +1,11 @@
+import uuid
 from rest_framework import serializers
+
+from .models import DeliveryRequest, Outfit, GarmentType, BodyPart
+from sl_profile.models import Grid, Resident
+from sl_profile.serializers import GridInfoSerializer
+from sl_profile import util
+from payroll.models import fiscal_date
 
 
 class InventorySerializer(serializers.Serializer):
@@ -14,7 +21,7 @@ class InventorySerializer(serializers.Serializer):
     everyone_perms = serializers.IntegerField()
 
 
-class GarmentType(serializers.Serializer):
+class GarmentTypeSerializer(serializers.Serializer):
     id = serializers.IntegerField(min_value=0)
     name = serializers.CharField(max_length=200)
 
@@ -45,25 +52,50 @@ class DeliveryRequestSerializer(serializers.Serializer):
     inventory = serializers.ListField(child=InventorySerializer())
     outfit_id = serializers.UUIDField()
     creator_id = serializers.UUIDField()
-    region_hostname = serializers.CharField()
-    outfit_components = serializers.ListField(child=GarmentType())
+    grid = GridInfoSerializer()
+    outfit_components = serializers.ListField(child=GarmentTypeSerializer())
+
+    def create(self, validated_data):
+        headers = util.parse_secondlife_http_headers(validated_data['request'].META)
+        instance = DeliveryRequest()
+        instance.grid = Grid.get(**validated_data['grid'])
+        instance.owner = Resident.get(
+            grid=instance.grid,
+            key=headers['owner_id'],
+            name=headers['owner_name'],
+        )
+        instance.creator = Resident.get(
+            grid=instance.grid,
+            key=validated_data['creator_id'],
+        )
+        instance.box_id = headers['object_id']
+        instance.box_name = headers['object_name']
+        components = [GarmentType.objects.get(pk=type['id']) for type in validated_data['outfit_components']]
+        instance.outfit, created = Outfit.objects.get_or_create(
+            pk=validated_data['outfit_id'],
+            defaults={
+                'creator': instance.creator,
+                'box_name': instance.box_name,
+                'components': components,
+            })
+        instance.region_name = headers['region_name']
+        instance.region_pos = headers['region_coordinates']
+        instance.region_hostname = validated_data['grid']['region_hostname']
+        instance.box_pos = headers['object_position']
+        instance.box_rot = headers['object_rotation']
+        instance.box_vel = headers['object_velocity']
+        instance.slurl = util.slurl(headers['region_name'], headers['object_position'])
+        instance.inventory_count = len(validated_data['inventory'])
+        # FIXME: This is not right. Strip the inventory of internal scripts, creator prim, and notecard
+        instance.extra_inventory_count = instance.inventory_count
+        instance.fiscal_date = fiscal_date()
+        instance.body = BodyPart.objects.get(pk=validated_data['body_parts']['body']['id'])
+        instance.save()
+        # Many to many relationships need primary key set first, ie, saved
+        instance.mods = [BodyPart.objects.get(pk=type['id']) for type in validated_data['body_parts']['mods']]
+        return instance
 
 
-"""
-box_name = models.CharField(max_length=64)
-region_name = models.CharField(max_length=32)
-region_pos = fields.ArrayField(models.IntegerField(), max_length=2)
-region_hostname = models.URLField(max_length=200)
-box_pos = fields.ArrayField(models.FloatField(), max_length=3)
-box_rot = fields.ArrayField(models.FloatField(), max_length=4)
-box_vel = fields.ArrayField(models.FloatField(), max_length=3)
-inventory_count = models.PositiveSmallIntegerField()
-extra_inventory_count = models.PositiveSmallIntegerField()
-slurl = models.URLField(max_length=200)
-time = models.DateTimeField(auto_now_add=True)
-grid = models.ForeignKey(Grid, on_delete=models.CASCADE)
-fiscal_day = models.DateField()
-"""
 
 """
 ///////////////////////////////////////////////////////////////

@@ -74,7 +74,7 @@ class Outfit(models.Model):
     # box name might change without changing outfit id, but probably not after
     # being sold. Just in case, update the box_name each day the outfit is seen
     box_name = models.CharField(max_length=64)
-    garments = models.ManyToManyField(GarmentType)
+    components = models.ManyToManyField(GarmentType)
 
 
 class DeliveryRequest(BodySpec):

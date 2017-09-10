@@ -195,3 +195,9 @@ class GetResidentTest(TestCase):
         self.assertEqual(Resident.objects.count(), 0)
 
 
+class SlurlTestCase(unittest.TestCase):
+    def test_slurl_1(self):
+        self.assertEqual(
+            util.slurl('Lost Farm', [131.02790, 84.44020, 22.80863]),
+            'http://maps.secondlife.com/secondlife/Lost%20Farm/131/84/22')
+

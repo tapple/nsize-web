@@ -1,5 +1,8 @@
 from collections import namedtuple
+from uuid import UUID
+from urllib.parse import quote
 import re
+import json
 
 FULLNAME_REGEX = re.compile(r'(.*) \((.*)\)')
 
@@ -61,6 +64,28 @@ def to_fullname(user_name, display_name):
         return display_name
     else:
         return "%s (%s)" % (display_name, user_name)
+
+def slurl(region_name, position, prefix='http://maps.secondlife.com/secondlife/'):
+    return '%s%s/%d/%d/%d' % (prefix, quote(region_name), position[0], position[1], position[2])
+
+def _parse_tuple(str):
+    return json.loads(str.replace('(', '[').replace(')', ']'))
+
+def parse_secondlife_http_headers(headers):
+    parsed = dict()
+    parsed['owner_id'] = UUID(headers['HTTP_X_SECONDLIFE_OWNER_KEY'])
+    parsed['owner_name'] = headers['HTTP_X_SECONDLIFE_OWNER_NAME']
+    parsed['object_id'] = UUID(headers['HTTP_X_SECONDLIFE_OBJECT_KEY'])
+    parsed['object_name'] = headers['HTTP_X_SECONDLIFE_OBJECT_NAME']
+    parsed['object_position'] = _parse_tuple(headers['HTTP_X_SECONDLIFE_LOCAL_POSITION'])
+    parsed['object_rotation'] = _parse_tuple(headers['HTTP_X_SECONDLIFE_LOCAL_ROTATION'])
+    parsed['object_velocity'] = _parse_tuple(headers['HTTP_X_SECONDLIFE_LOCAL_VELOCITY'])
+    parsed['shard'] = headers['HTTP_X_SECONDLIFE_SHARD']
+    region_header = headers['HTTP_X_SECONDLIFE_REGION']
+    match = FULLNAME_REGEX.fullmatch(region_header)
+    parsed['region_name'] = match.group(1)
+    parsed['region_coordinates'] = json.loads('[%s]' % match.group(2))
+    return parsed
 
 # the web profiles have seperate tags for user name and display name:
 # https://my.secondlife.com/tapple.gao

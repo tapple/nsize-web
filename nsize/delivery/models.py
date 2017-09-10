@@ -67,7 +67,7 @@ class Outfit(models.Model):
     auditing sellers who aren't distributing enough to nSize. Due to that,
     this table is only maintained once per day, during the daily settlement
     """
-    outfit_id = models.UUIDField(primary_key=True)
+    id = models.UUIDField(primary_key=True)
     creator = models.ForeignKey(Resident, on_delete=models.CASCADE)
     first_seen_time = models.DateTimeField(auto_now_add=True)
     # box name might change without changing outfit id, but probably not after
@@ -104,11 +104,11 @@ class DeliveryRequest(BodySpec):
     slurl = models.URLField(max_length=200)
     time = models.DateTimeField(auto_now_add=True)
     grid = models.ForeignKey(Grid, on_delete=models.CASCADE)
-    fiscal_day = models.DateField()
+    fiscal_date = models.DateField()
 
     class Meta:
         db_table = 'delivery_request_log'
         indexes = [
-            models.Index(fields=['grid', 'fiscal_day', 'creator']),
-            models.Index(fields=['grid', 'creator', 'fiscal_day']),
+            models.Index(fields=['grid', 'fiscal_date', 'creator']),
+            models.Index(fields=['grid', 'creator', 'fiscal_date']),
         ]

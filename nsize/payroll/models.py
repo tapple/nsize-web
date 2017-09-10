@@ -1,7 +1,31 @@
+from datetime import datetime, timedelta
+
 from django.db import models
+import pytz
 
 from sl_profile.models import Grid, Resident
 from delivery.models import Garment, BodyPart
+
+UTC = pytz.UTC
+PST = pytz.timezone('US/Pacific')
+""" fiscal day is from 3:00 am to 2:59 am PST the next day """
+FISCAL_DAY_END_HOUR = 3
+
+
+def fiscal_date(timestamp=None, tz=UTC):
+    """
+    :param timestamp: the timestamp to evaluate. default is datetime.utcnow()
+    :param tz: the timezone of the given timestamp. Default is UTC
+    :return: the datetime.date which transactions are processed as happening in
+    """
+    if not timestamp:
+        timestamp = datetime.utcnow()
+    timestamp = tz.localize(timestamp)
+    timestamp_slt = timestamp.astimezone(PST)
+    date = timestamp_slt.date()
+    if timestamp_slt.hour < FISCAL_DAY_END_HOUR:
+        date -= timedelta(days=1)
+    return date
 
 
 class GarmentDistribution(models.Model):
@@ -74,18 +98,18 @@ class Transaction(models.Model):
     category = models.CharField(max_length=5, choices=CATEGORY_CHOICES)
 
     grid = models.ForeignKey(Grid, on_delete=models.CASCADE)
-    fiscal_day = models.DateField()
+    fiscal_date = models.DateField()
 
     class Meta:
         db_table = 'payroll_transaction_log'
         indexes = [
-            models.Index(fields=['grid', 'fiscal_day', 'resident']),
+            models.Index(fields=['grid', 'fiscal_date', 'resident']),
         ]
 
 
 class DayLedger(models.Model):
     grid = models.ForeignKey(Grid, on_delete=models.CASCADE)
-    fiscal_day = models.DateField()
+    fiscal_date = models.DateField()
 
     # Sales
     sale_count = models.PositiveIntegerField()
@@ -112,7 +136,7 @@ class DayLedger(models.Model):
     creator_dividend_to_date = models.PositiveIntegerField()
 
     class Meta:
-        unique_together = (("grid", "fiscal_day"),)
+        unique_together = (("grid", "fiscal_date"),)
 
 
 class MyDayLedger(DayLedger):

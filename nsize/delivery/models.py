@@ -11,10 +11,11 @@ class BodyPart(models.Model):
         on_delete=models.CASCADE,
         related_name='mods',
         related_query_name='mod',
+        null=True,
     )
 
     def __str__(self):
-        return self.question_text
+        return self.name
 
 
 class GarmentType(models.Model):
@@ -25,7 +26,7 @@ class GarmentType(models.Model):
 
 
 class BodySpec(models.Model):
-    avatar = models.ForeignKey(
+    body = models.ForeignKey(
         BodyPart,
         on_delete=models.CASCADE,
     )
@@ -73,6 +74,7 @@ class Outfit(models.Model):
     # box name might change without changing outfit id, but probably not after
     # being sold. Just in case, update the box_name each day the outfit is seen
     box_name = models.CharField(max_length=64)
+    garments = models.ManyToManyField(GarmentType)
 
 
 class DeliveryRequest(BodySpec):
@@ -81,6 +83,7 @@ class DeliveryRequest(BodySpec):
         on_delete=models.CASCADE,
         related_name='+',
     )
+    """ creator is a duplicate of outfit.creator, but is kept because its indexed """
     creator = models.ForeignKey(
         Resident,
         on_delete=models.CASCADE,

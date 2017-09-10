@@ -1,0 +1,15 @@
+[
+{ "model": "delivery.bodypart", "pk": 2, "fields": { "name": "Orange Nova Snaggletooth Kobold", "modifies": null } },
+{ "model": "delivery.bodypart", "pk": 3, "fields": { "name": "FUZZBUTTS Kobold Floaty Boobs", "modifies": 2 } },
+{ "model": "delivery.bodypart", "pk": 4, "fields": { "name": "FUZZBUTTS Kobold Chubby Belly", "modifies": 2 } },
+{ "model": "delivery.bodypart", "pk": 5, "fields": { "name": "FUZZBUTTS Kobold Matriarchs Breasts", "modifies": 2 } },
+{ "model": "delivery.bodypart", "pk": 6, "fields": { "name": "FUZZBUTTS Kobold Multiboobs", "modifies": 2 } },
+{ "model": "delivery.bodypart", "pk": 7, "fields": { "name": "FUZZBUTTS Kobold Pregnant Belly", "modifies": 2 } },
+{ "model": "delivery.bodypart", "pk": 8, "fields": { "name": "Orange Nova Dvalinn Deer", "modifies": null } },
+{ "model": "delivery.bodypart", "pk": 9, "fields": { "name": "Orange Nova Bifrost Bunny", "modifies": null } },
+{ "model": "delivery.bodypart", "pk": 10, "fields": { "name": "FUZZBUTTS Dvalinn Breasts", "modifies": 8 } },
+{ "model": "delivery.bodypart", "pk": 12, "fields": { "name": "FUZZBUTTS Kobold Backbreaker Tits", "modifies": 2 } },
+{ "model": "delivery.bodypart", "pk": 13, "fields": { "name": "FUZZBUTTS Dvalinn Paw Feet", "modifies": 8 } },
+{ "model": "delivery.garmenttype", "pk": 1, "fields": { "name": "TEST bodysuit" } },
+{ "model": "delivery.garmenttype", "pk": 2, "fields": { "name": "TEST trousers" } }
+]

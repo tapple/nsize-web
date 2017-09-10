@@ -50,7 +50,11 @@ class Resident(models.Model):
     last_name = models.CharField(max_length=64)
 
     def __str__(self):
-        return self.name
+        return '%s (%s)' % (self.legacy_name, self.name)
+
+    @property
+    def legacy_name(self):
+        return '%s %s' % (self.first_name, self.last_name)
 
     @classmethod
     def _create_secondlife_resident(cls, grid, key=None, name=None):

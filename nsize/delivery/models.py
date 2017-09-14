@@ -102,6 +102,7 @@ class DeliveryRequest(BodySpec):
     box_pos = fields.ArrayField(models.FloatField(), max_length=3)
     box_rot = fields.ArrayField(models.FloatField(), max_length=4)
     box_vel = fields.ArrayField(models.FloatField(), max_length=3)
+    box_server_url = models.URLField(max_length=200)
     inventory_count = models.PositiveSmallIntegerField()
     extra_inventory_count = models.PositiveSmallIntegerField()
     slurl = models.URLField(max_length=200)

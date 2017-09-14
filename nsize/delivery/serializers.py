@@ -84,6 +84,7 @@ class DeliveryRequestSerializer(serializers.Serializer):
         instance.box_pos = headers['object_position']
         instance.box_rot = headers['object_rotation']
         instance.box_vel = headers['object_velocity']
+        instance.box_server_url = validated_data['box_server_url']
         instance.slurl = util.slurl(headers['region_name'], headers['object_position'])
         instance.inventory_count = len(validated_data['inventory'])
         # FIXME: This is not right. Strip the inventory of internal scripts, creator prim, and notecard

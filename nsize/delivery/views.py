@@ -4,6 +4,7 @@ from rest_framework import status
 
 from .models import DeliveryRequest
 from .serializers import DeliveryRequestSerializer
+from . import tasks
 
 
 class Deliver(APIView):
@@ -15,5 +16,6 @@ class Deliver(APIView):
         serializer = DeliveryRequestSerializer(data=request.data)
         if serializer.is_valid():
             delivery_request = serializer.save(request=request)
+            tasks.instant_message.delay(delivery_request.owner.key, "hello from django celery")
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -16,4 +16,4 @@ envdir==0.7
 
 # Deployment
 awscli==1.11.144
-awsebcli==3.10.6
+awsebcli==3.11.0

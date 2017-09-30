@@ -56,7 +56,7 @@ class DeliveryRequestSerializer(serializers.Serializer):
     outfit_components = serializers.ListField(child=GarmentTypeSerializer())
 
     def create(self, validated_data):
-        headers = util.parse_secondlife_http_headers(validated_data['request'].META)
+        headers = validated_data['headers']
         instance = DeliveryRequest()
         instance.grid = Grid.get(**validated_data['grid'])
         instance.owner = Resident.get(

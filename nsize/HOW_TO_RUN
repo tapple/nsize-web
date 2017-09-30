@@ -1,0 +1,1 @@
+celery -A delivery.tasks worker --loglevel=info

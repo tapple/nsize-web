@@ -5,6 +5,7 @@ from rest_framework import status
 from .models import DeliveryRequest
 from .serializers import DeliveryRequestSerializer
 from . import tasks
+from sl_profile import util
 
 
 class Deliver(APIView):
@@ -14,8 +15,11 @@ class Deliver(APIView):
 
     def post(self, request, format=None):
         serializer = DeliveryRequestSerializer(data=request.data)
+        headers = util.parse_secondlife_http_headers(request.META)
         if serializer.is_valid():
-            delivery_request = serializer.save(request=request)
-            tasks.instant_message.delay(delivery_request.owner.key, "hello from django celery")
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            delivery_request = serializer.save(headers=headers)
+            tasks.deliver.delay(delivery_request.id, request.data, headers)
+            return Response({
+                "delivery_id": delivery_request.id,
+            }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

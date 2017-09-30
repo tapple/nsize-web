@@ -1,4 +1,6 @@
+import json
 from celery import Celery
+from celery.contrib import rdb
 import requests
 
 app = Celery('tasks', broker='redis://localhost:6379/0')
@@ -15,3 +17,9 @@ def instant_message(avatar_id, message):
             'msg': message,
         }
     )
+
+
+@app.task
+def deliver(delivery_id, request, headers):
+    #rdb.set_trace()
+    instant_message.delay(headers['owner_id'], json.dumps(request))

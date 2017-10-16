@@ -14,7 +14,7 @@ django-redis==4.8.0
 django-model-utils==3.0.0
 
 # Rest apis
-djangorestframework==3.6.4
+djangorestframework==3.7.1
 #Markdown==2.6.8
 #django-filter==1.0.4
 

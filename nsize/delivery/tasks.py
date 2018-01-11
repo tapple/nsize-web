@@ -22,4 +22,4 @@ def instant_message(avatar_id, message):
 @app.task
 def deliver(delivery_id, request, headers):
     #rdb.set_trace()
-    instant_message.delay(headers['owner_id'], json.dumps(request))
+    instant_message(headers['owner_id'], json.dumps(request))

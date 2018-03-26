@@ -12,7 +12,7 @@ httpie==0.9.9
 # Command Utils
 #Fabric==1.13.2
 #pycrypto==2.6.1
-envdir==0.7
+envdir==1.0.1
 
 # Deployment
 awscli==1.14.22

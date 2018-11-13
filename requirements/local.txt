@@ -15,5 +15,5 @@ httpie==0.9.9
 envdir==0.7
 
 # Deployment
-awscli==1.14.22
+awscli==1.16.53
 awsebcli==3.12.1

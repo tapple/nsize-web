@@ -41,4 +41,4 @@ backoff==1.4.3
 requests==2.18.4
 beautifulsoup4==4.6.0
 lxml==4.1.1
-djproxy==2.3.4
+djproxy==2.3.6

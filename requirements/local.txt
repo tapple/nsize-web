@@ -4,7 +4,7 @@
 # Debugging
 django-extensions==1.9.9
 ptpython==0.41
-httpie==0.9.9
+httpie==3.0.1
 
 # Docs
 #Sphinx==1.6.3

@@ -2,7 +2,7 @@
 -r test.txt
 
 # Debugging
-django-extensions==1.9.9
+django-extensions==3.2.1
 ptpython==0.41
 httpie==0.9.9
 

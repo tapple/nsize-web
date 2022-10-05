@@ -37,7 +37,7 @@ Pillow==5.0.0
 pytz==2017.3
 
 # Parsing Secondlife api's
-backoff==1.4.3
+backoff==2.2.1
 requests==2.18.4
 beautifulsoup4==4.6.0
 lxml==4.1.1

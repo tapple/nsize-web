@@ -39,6 +39,6 @@ pytz==2017.3
 # Parsing Secondlife api's
 backoff==1.4.3
 requests==2.18.4
-beautifulsoup4==4.6.0
+beautifulsoup4==4.12.3
 lxml==4.1.1
 djproxy==2.3.4

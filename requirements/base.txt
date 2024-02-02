@@ -34,7 +34,7 @@ Pillow==5.0.0
 #django-rq==0.9.5
 
 # Time zones support
-pytz==2017.3
+pytz==2024.1
 
 # Parsing Secondlife api's
 backoff==1.4.3

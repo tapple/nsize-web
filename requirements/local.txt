@@ -3,7 +3,7 @@
 
 # Debugging
 django-extensions==1.9.9
-ptpython==0.41
+ptpython==3.0.29
 httpie==0.9.9
 
 # Docs

@@ -7,7 +7,7 @@ dj-database-url==3.0.1
 django-cache-url==2.0.0
 
 # For the persistence stores
-psycopg2==2.7.3.2
+psycopg2==2.9.11
 django-redis==4.8.0
 celery[eventlet,sqs,redis]==5.6.1
 

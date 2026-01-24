@@ -4,7 +4,7 @@ Django==6.0.1
 # Environmental var configuration
 django-configurations==2.0
 dj-database-url==3.1.0
-django-cache-url==2.0.0
+django-cache-url==3.4.6
 
 # For the persistence stores
 psycopg2==2.9.11

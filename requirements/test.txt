@@ -9,7 +9,7 @@
 #nose-progressive==1.5.1
 
 # Code Coverage
-coverage==7.13.1
+coverage==7.13.2
 
 # Style Enforcement
 flake8==3.5.0

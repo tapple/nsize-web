@@ -25,7 +25,7 @@ whitenoise==6.11.0
 # Media files
 #boto==2.47.0
 #django_unique_upload==0.2.1
-Pillow==12.1.0
+Pillow==12.1.1
 
 # Image manipulation
 #django-versatileimagefield==1.7.0

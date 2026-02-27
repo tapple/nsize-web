@@ -20,7 +20,7 @@ djangorestframework==3.16.1
 #django-filter==1.0.4
 
 # Static files
-whitenoise==6.11.0
+whitenoise==6.12.0
 
 # Media files
 #boto==2.47.0

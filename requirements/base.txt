@@ -40,5 +40,5 @@ pytz==2025.2
 backoff==1.4.3
 requests==2.18.4
 beautifulsoup4==4.6.0
-lxml==6.0.2
+lxml==6.0.3
 djproxy==2.3.4
